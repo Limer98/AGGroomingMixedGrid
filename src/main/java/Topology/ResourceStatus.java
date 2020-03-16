@@ -53,6 +53,7 @@ class ConsumCapType{
     public boolean isTx;
     public HashMap<Integer, CoSerEG> coServiceEG;//合作的业务请求electrical grooming,id and transmission rate
     public int consumNumsEG;//电疏导结束后，量化后的消耗个数
+    public int clubEG = -1;
 
     public ConsumCapType(int consumNums,int consumCap,boolean isTx){
         this.consumNums = consumNums;
