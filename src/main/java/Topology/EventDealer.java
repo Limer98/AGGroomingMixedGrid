@@ -363,12 +363,6 @@ public class EventDealer {
             }
         }
         int coReqResNum = consumCapTypeList0.get(serLoggerIndex).consumNums;
-//        if(lastOne.clubEG==-1){
-//            lastOne.clubEG = serOnLink0.eventId;
-//        }else {
-//            System.out.println("lastOne.clubEG!=-1");
-//        }
-
 
         if (tempMap.containsKey(s.eventId)){
 
@@ -538,51 +532,37 @@ public class EventDealer {
 
         List<ConsumCapType> capTypeList = node.resPerNode.get(transID).ResLogger.get(s.eventId);
 
-
-        for (int j = 0; j < capTypeList.size(); j++) {
-            ConsumCapType capType = capTypeList.get(j);
+        for (int i = 0; i < capTypeList.size(); i++) {
+            ConsumCapType capType = capTypeList.get(i);
             /** new electrical grooming **/
             boolean flagCoSerExist = false;
-//
-//            if ()
-//
-//            if (s.coSerEGList != null) {
-//                for (int q = 0; q < s.coSerEGList.size(); q++) {
-//                    if (s.obtainEndTime() < s.coSerEGList.get(q).departTime) {
-//                        flagCoSerExist = true;
-//                    }
-//                }
-//                if (flagCoSerExist) {
-////                    int cap = capType.consumNums;
-////                    if (capType.isTx){
-////                        node.resPerNode.get(transID).TxResource += 0;
-////                    }else {
-////                        node.resPerNode.get(transID).RxResource += 0;
-////                    }
-////                    node.resPerNode.get(transID).ResLogger.get(s.eventId).remove(capType);
-//                } else {
-//                    int cap = capType.consumNums;
-////                    int capEG;
-////                    if (cap == 0){
-////                        capEG = capType.consumNumsEG;
-////                    }else{
-////                        capEG = capType.consumNums;
-////                    }
-//                    int capEG = capType.consumNumsEG;
-//                    if (capType.isTx) {
-//                        node.resPerNode.get(transID).TxResource += capEG;
-//                    } else {
-//                        node.resPerNode.get(transID).RxResource += capEG;
-//                    }
-//                    if (node.resPerNode.get(transID).TxResource > 8 || node.resPerNode.get(transID).RxResource > 8) {
-//                        System.out.println("Resource>8");
-//                    }
-//                }
-//            }
-//            node.resPerNode.get(transID).ResLogger.get(s.eventId).remove(capType);
+            //find whether coSerEG exists
+            Iterator iter = node.resPerNode.get(transID).ResLogger.entrySet().iterator();
+            while (iter.hasNext()) {
+                HashMap.Entry entry = (HashMap.Entry) iter.next();
+                Object serID = entry.getKey();
+                Object capTypeListTotal = entry.getValue();
+                List<ConsumCapType> tempCapTypeList = (List<ConsumCapType>) capTypeListTotal;
+                for (int j = 0; j < tempCapTypeList.size(); j++) {
+                    if (tempCapTypeList.get(j).clubEG == capType.clubEG
+                            && tempCapTypeList.get(j).clubEG!=-1
+                            && tempCapTypeList.get(j).isTx == capType.isTx
+                            && (int) serID != s.eventId) {
+                        flagCoSerExist = true;
+                    }
+                }
+            }
+            if (!flagCoSerExist) {
+                int capEG = capType.consumNumsEG;
+                if (capType.isTx) {
+                    node.resPerNode.get(transID).TxResource += capEG;
+                } else {
+                    node.resPerNode.get(transID).RxResource += capEG;
+                }
+            }
+            node.resPerNode.get(transID).ResLogger.get(s.eventId).remove(capType);
 
             /** --- **/
-
 //            int cap = capType.consumNums;
 //            if (capType.isTx){
 //                node.resPerNode.get(transID).TxResource += cap;
@@ -590,11 +570,12 @@ public class EventDealer {
 //                node.resPerNode.get(transID).RxResource += cap;
 //            }
 //            node.resPerNode.get(transID).ResLogger.get(s.eventId).remove(capType);
-//        }
-            if (node.resPerNode.get(transID).ResLogger.get(s.eventId).size() == 0) {
-                node.resPerNode.get(transID).ResLogger.remove(s.eventId);
-            }
         }
+
+        if (node.resPerNode.get(transID).ResLogger.get(s.eventId).size() == 0) {
+            node.resPerNode.get(transID).ResLogger.remove(s.eventId);
+        }
+
     }
 /*    public boolean checkElecGrooming(Node node,ServiceEvent s,ServiceEvent currentSer){
         for (int i = 0; i < node.resPerNode.size(); i++){
@@ -855,72 +836,63 @@ public class EventDealer {
 //            }
 //        }
         /*** --- ***/
-        for (int i = 0; i < serInMap.OEOLogger.size(); i++){
-//            if (serInMap.OEOLogger.size() == 1){
-//                System.out.println(serInMap.eventId+"--serInMap.OEOLogger.size() == 1");
-//            }
-            AuNode tempAuNode = serInMap.OEOLogger.get(i);
-//          int nodeTransID = tempAuNode.resourceStatus.transID;
-            double nodeResSlot = CommonResource.calcuResourceSlot(tempAuNode.isFixed);
-            List<ConsumCapType> tempList= tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId);
-            int tempListID = 0;
-            if (tempList == null){
-                System.out.println("tempList == null");
-            }
-            if (tempList.size()>1){
-                tempListID = splitID;
-            }
-            if (tempAuNode.NodeType == 0){//Tx
-//                double nodeEGCap = (tempAuNode.resourceStatus.TxResource
-//                        +tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId).get(tempListID).consumNums)*nodeResSlot;
-                double nodeEGCap = tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId).get(tempListID).consumNumsEG*nodeResSlot;
-//                if (nodeEGCap == 0){
-//                    System.out.println("nodeEGCap == 0");
-//                }
-                totalTR = calcuTotalTRforEG(serInMap,tempAuNode,true);
-//                if (nodeEGCap>= (serInMap.transmissionRate+currentSer.transmissionRate)){
-                if (nodeEGCap>= (totalTR+currentSer.transmissionRate)){
-                    //satisfy electrical grooming constraint
-                    flagSrc = true;
-                }
-            }
-            if (tempAuNode.NodeType == 1){//Rx
-//                double nodeEGCap = (tempAuNode.resourceStatus.RxResource
-//                        +tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId).get(tempListID).consumNums)*nodeResSlot;
-                double nodeEGCap = tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId).get(tempListID).consumNumsEG*nodeResSlot;
-                totalTR = calcuTotalTRforEG(serInMap,tempAuNode,false);
-//                if (nodeEGCap>= (serInMap.transmissionRate+currentSer.transmissionRate)){
-                if (nodeEGCap>= (totalTR+currentSer.transmissionRate)){
-                    //satisfy electrical grooming constraint
-                    flagDst = true;
-                }
-            }
-            if (flagSrc&flagDst){//此时tempAuNode是dstNode
+        for (int i = 0; i < serInMap.OEOLogger.size()/2; i++){
+            /*** a pair with two node ***/
+            for (int j = 0; j < 2; j++){//i+j
                 flagSrc = false;
                 flagDst = false;
-                AuNode srcNode = serInMap.OEOLogger.get(i-1);
-                //set weight
-                double weight;
-                if (srcNode.isFixed & tempAuNode.isFixed){//both fixed node
-                    weight = 0.001;
-                }else if (!srcNode.isFixed & !tempAuNode.isFixed){//both flexible node
-                    weight = 1.683*currentSer.transmissionRate;
-                }else {//a fixed and a flexible node
-                    weight = 0.8415*currentSer.transmissionRate;
+                AuNode tempAuNode = serInMap.OEOLogger.get(i+j);
+                double nodeResSlot = CommonResource.calcuResourceSlot(tempAuNode.isFixed);
+                List<ConsumCapType> tempList= tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId);
+                int tempListID = 0;
+                if (tempList == null){
+                    System.out.println("tempList == null");
                 }
-                //add link
-//                Link link = new Link(serInMap.getSrc(), serInMap.getDst(), weight);
-//                Link link = new Link(srcNode.nodeID, tempAuNode.nodeID, weight);//in physical graph
-                Link link = new Link(calAuNodeID(srcNode.nodeID,2), calAuNodeID(tempAuNode.nodeID,3), weight);//in auxiliary graph
-//                link.containFixed = serInMap.ownAuPath.containFixed;
-                if (vLinkList.contains(link)){
-                    int index = vLinkList.indexOf(link);
-                    vLinkList.get(index).serviceOnLink.add(serInMap);
-                }else {
-                    link.serviceOnLink.add(serInMap);
-                    vLinkList.add(link);
+                if (tempList.size()>1){
+                    tempListID = splitID;
+                }
+                if (tempAuNode.NodeType == 0){//Tx
+                    double nodeEGCap = tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId).get(tempListID).consumNumsEG*nodeResSlot;
+                    totalTR = calcuTotalTRforEG(serInMap,tempAuNode,true);
+                    if (nodeEGCap>= (totalTR+currentSer.transmissionRate)){
+                        //satisfy electrical grooming constraint
+                        flagSrc = true;
+                    }
+                }
+                if (tempAuNode.NodeType == 1){//Rx
+                    double nodeEGCap = tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId).get(tempListID).consumNumsEG*nodeResSlot;
+                    totalTR = calcuTotalTRforEG(serInMap,tempAuNode,false);
+                    if (nodeEGCap>= (totalTR+currentSer.transmissionRate)){
+                        //satisfy electrical grooming constraint
+                        flagDst = true;
+                    }
+                }
+                if (flagSrc&flagDst){//此时tempAuNode是dstNode
+//                    flagSrc = false;
+//                    flagDst = false;
+                    AuNode srcNode = serInMap.OEOLogger.get(i-1);
+                    //set weight
+                    double weight;
+                    if (srcNode.isFixed & tempAuNode.isFixed){//both fixed node
+                        weight = 0.001;
+                    }else if (!srcNode.isFixed & !tempAuNode.isFixed){//both flexible node
+                        weight = 1.683*currentSer.transmissionRate;
+                    }else {//a fixed and a flexible node
+                        weight = 0.8415*currentSer.transmissionRate;
+                    }
+                    //add link
+                    Link link = new Link(calAuNodeID(srcNode.nodeID,2), calAuNodeID(tempAuNode.nodeID,3), weight);//in auxiliary graph
+                    if (vLinkList.contains(link)){
+                        int index = vLinkList.indexOf(link);
+                        vLinkList.get(index).serviceOnLink.add(serInMap);
+                    }else {
+                        link.serviceOnLink.add(serInMap);
+                        vLinkList.add(link);
+                    }
                 }
             }
+
+            /*** --- ***/
         }
     }
 
