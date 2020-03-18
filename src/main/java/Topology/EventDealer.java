@@ -118,14 +118,12 @@ public class EventDealer {
             }
         }
 
-        if (s.getEventId() == 500){
-            System.out.println("500");
-        }
         //资源分配,资源不足时，返回false;run once;
 //        s.flagForSuccess = updateResource_newLP(p,s);
 
         if (s.flagForSuccess){
             CommonResource.ongoingServiceMap.put(s.eventId,s);
+            calcuEnergyConsumed(s);
         }
         serviceMap.put(s.getEventId(),s);
     }
@@ -161,16 +159,13 @@ public class EventDealer {
             }
         }
 
-        if (s.eventId==0){
-            System.out.println("00000");
-        }
 
         if (s.flagForSuccess){
             releaseResource(s);
             CommonResource.ongoingServiceMap.remove(s.eventId);
-            System.out.println(s.eventId+"--Success");
+//            System.out.println(s.eventId+"--Success");
         }else{
-            System.out.println(s.eventId+"--failure");
+//            System.out.println(s.eventId+"--failure");
         }
 
     }
@@ -669,6 +664,60 @@ public class EventDealer {
         return aP;
     }
 
+    public void calcuEnergyConsumed(ServiceEvent s){
+        double energyConsumed = 0;
+        if (s.splitNum==0){
+            AuxPath aP = s.ownAuPath;
+            for (int i = 0; i < aP.auEdgeList.size(); i++){
+                double weight = aP.auEdgeList.get(i).getWeight();
+                if (weight!=0.001 && weight!=0.0001){
+                    energyConsumed += weight;
+                }
+            }
+            s.energyConsumed = energyConsumed;
+        }else{
+            for (int i = 0; i < s.splitNum; i++){
+                energyConsumed = 0;
+                AuxPath aP = s.subSerList.get(i).ownAuPath;
+                for (int j = 0; j < aP.auEdgeList.size(); j++){
+                    double weight = aP.auEdgeList.get(j).getWeight();
+                    if (weight!=0.001 && weight!=0.0001){
+                        energyConsumed += weight;
+                    }
+                }
+                s.subSerList.get(i).energyConsumed = energyConsumed;
+                s.energyConsumed += s.subSerList.get(i).energyConsumed;
+            }
+        }
+    }
+
+    public void calcuEnergyConsumedGeneral(ServiceEvent s){
+        double energyConsumed = 0;
+        if (s.splitNum==0){
+
+            List<AuNode> OEOLogger = s.OEOLogger;
+            for (int i = 0; i < OEOLogger.size(); i++){
+                AuNode auNode = OEOLogger.get(i);
+
+
+            }
+            s.energyConsumed = energyConsumed;
+        }else{
+            for (int i = 0; i < s.splitNum; i++){
+                energyConsumed = 0;
+                AuxPath aP = s.subSerList.get(i).ownAuPath;
+                for (int j = 0; j < aP.auEdgeList.size(); j++){
+                    double weight = aP.auEdgeList.get(j).getWeight();
+                    if (weight!=0.001 && weight!=0.0001){
+                        energyConsumed += weight;
+                    }
+                }
+                s.subSerList.get(i).energyConsumed = energyConsumed;
+                s.energyConsumed += s.subSerList.get(i).energyConsumed;
+            }
+        }
+    }
+
     public List<Link> genAuLinkList(List<Node> nodeList,List<AuNode> auNodeList,List<Link> linkList,List<Link> auIPLinkList,ServiceEvent s){
         //判断是否充足的slots资源，否的话，删去对应链路(本程序中认为slot资源充足)
         List<Link> auLinkList = new ArrayList<Link>();
@@ -713,12 +762,26 @@ public class EventDealer {
     public double setWeightofOTRI(AuNode auNode,int transmissionRate){
         double weightO1toT1; //the same as weightR1toI1
         if (auNode.isFixed){
-            weightO1toT1 = 185.5;
+            weightO1toT1 = 188;//185.5+102.5
         }else {
             if (auNode.isSub){
                 weightO1toT1 = 0.8415*transmissionRate;
             }else {
-                weightO1toT1 = 0.8415*transmissionRate+45.6665;
+                weightO1toT1 = 0.8415*transmissionRate+325.6665;//0.8415*transmissionRate+45.6665+280
+            }
+        }
+        return weightO1toT1;
+    }
+
+    public double setWeighofOTRICompare(AuNode auNode,int transmissionRate){
+        double weightO1toT1; //the same as weightR1toI1
+        if (auNode.isFixed){
+            weightO1toT1 = 100;
+        }else {
+            if (auNode.isSub){
+                weightO1toT1 = 0.001;
+            }else {
+                weightO1toT1 = 100;
             }
         }
         return weightO1toT1;
@@ -741,29 +804,6 @@ public class EventDealer {
                 vLinkList.add(link);
             }
         }
-//        Iterator iterSer = ongoingServiceMap.entrySet().iterator();
-//        while (iterSer.hasNext()){
-//            HashMap.Entry entry = (HashMap.Entry) iterSer.next();
-////            Object serID = entry.getKey();
-//            Object ser = entry.getValue();
-////            int sID = (Integer)serID;
-//            ServiceEvent s = (ServiceEvent)ser;
-//            int src = s.getSrc();
-//            int dst = s.getDst();
-//
-//            Node nodeSrc = nodeList.get(src-1);
-//            Node nodeDst = nodeList.get(dst-1);
-//
-//            if (nodeList.get(src-1).isFixedNode && nodeList.get(dst-1).isFixedNode){
-//                weight = 0.001;
-//            }else if ((!nodeList.get(src-1).isFixedNode && nodeList.get(dst-1).isFixedNode)
-//                    || (nodeList.get(src-1).isFixedNode && !nodeList.get(dst-1).isFixedNode)){
-//                weight =
-//            }
-//            Link link = new Link(s.getSrc(),s.getDst(),weight);
-//            vLinkList.add(link);
-//        }
-
         return vLinkList;
     }
 

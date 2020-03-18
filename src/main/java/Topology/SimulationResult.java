@@ -104,6 +104,7 @@ public class SimulationResult {
         int countTotal = 0;//count total success
         int step = 50;
         double aTemp;
+        double energyConsumed = 0;
         boolean flag;
         ArrayList<Double> successRadio = new ArrayList<Double>();
         ArrayList<Double> totalSuccessRadio = new ArrayList<Double>();
@@ -117,6 +118,7 @@ public class SimulationResult {
             }
             if (flag){
                 count++;
+                energyConsumed += serviceMap.get(i).energyConsumed;
             }
 
             if((i+1)%step==0){
@@ -132,11 +134,13 @@ public class SimulationResult {
             fileName =  sum+"resD.txt";
 
         System.out.println(count +" "+ sum);
-//        System.out.println(countTotal +" "+ sumService);
-//        double aveEnergy = calcuConsumEnergy()/count;
-//        System.out.println("aveEnergy: "+aveEnergy);
 
-        writeArrayToTxt(fileName,successRadio);
+//        System.out.println(countTotal +" "+ sumService);
+        double aveEnergy = energyConsumed/count;
+//        System.out.println("totalEnergy: "+energyConsumed);
+        System.out.println("aveEnergy: "+aveEnergy);
+
+//        writeArrayToTxt(fileName,successRadio);
     }
 
     public void writeArrayToTxt( String string,ArrayList<Double> successRadio) {

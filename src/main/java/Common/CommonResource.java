@@ -25,9 +25,9 @@ public class CommonResource {
    public static Integer[][] defaultTopo;
    public static Integer[][] defaultResource;
 
-   public static int numConnectionRequest = 1000;
+   public static int numConnectionRequest = 50000;
    public static int numSlots = 320; //1THz. granularity of FS is 12.5GHz(flex)
-   public static int[] transmissionRateSet = {25,50,150,200}; //Gbps
+   public static int[] transmissionRateSet = {10,20,30,40,50,60,70,80,90,100,110,120,130,140,150}; //Gbps
    //A 400Gbps sliceable optical transponder can be divided into three sub-transponders.
 //   public static int numIPPortPerNode = 15;
 //   public static int numTransponderPerNode = 15; //100Gbps 15
