@@ -24,6 +24,7 @@ public class ServiceEvent extends Event implements Cloneable {
     public int splitNum = 0; //建立多通道
     public List<ServiceEvent> subSerList;
     public List<AuNode> OEOLogger;//record O-E-O node:nodeID,used transponder resourceStatus
+    public double energyConsumed;
 //    public List<ServiceEvent> coSerEGList;
 //    public List<CoSerEG> coSerEGList = new ArrayList<CoSerEG>();
 

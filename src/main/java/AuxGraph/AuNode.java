@@ -7,6 +7,7 @@ public class AuNode {
     public int nodeID;
     public boolean isFixed;
     public boolean isSub;
+    public boolean isEG = false;
     public boolean isResEnough;
     public int NodeType;
     public ResourceStatus resourceStatus; // not listResourceStatus
