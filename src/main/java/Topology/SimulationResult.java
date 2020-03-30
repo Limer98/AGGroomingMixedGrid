@@ -126,6 +126,10 @@ public class SimulationResult {
                 successRadio.add(aTemp);
             }
 
+//            if (count == CommonResource.numConnectionRequest-5000){
+//                System.out.println("totalEnergy: "+energyConsumed);
+//            }
+
         }
         String fileName;
         if(isTree)
@@ -137,7 +141,7 @@ public class SimulationResult {
 
 //        System.out.println(countTotal +" "+ sumService);
         double aveEnergy = energyConsumed/count;
-//        System.out.println("totalEnergy: "+energyConsumed);
+        System.out.println("totalEnergy: "+energyConsumed);
         System.out.println("aveEnergy: "+aveEnergy);
 
 //        writeArrayToTxt(fileName,successRadio);

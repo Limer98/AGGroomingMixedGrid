@@ -22,6 +22,7 @@ public class ServiceEvent extends Event implements Cloneable {
     public AuxPath ownAuPath;
     public int bandwidth;
     public int splitNum = 0; //建立多通道
+    public int splitID = 0; //对于多通道，标志为第几个子业务
     public List<ServiceEvent> subSerList;
     public List<AuNode> OEOLogger;//record O-E-O node:nodeID,used transponder resourceStatus
     public double energyConsumed;
@@ -50,6 +51,10 @@ public class ServiceEvent extends Event implements Cloneable {
         this.src = src;
         this.dst = dst;
         this.transmissionRate = transmissionRate;
+    }
+
+    public ServiceEvent(){
+
     }
 
 /*    public ServiceEvent(EventType eventType, int eventId, double arriveTime, double holdTime, int src, List<Integer> dst, int requiredWaveNum) {

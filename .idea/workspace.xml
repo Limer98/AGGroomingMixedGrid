@@ -2,21 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="52f3bbb8-411a-4691-8e50-52d07ce184aa" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/50000-nodeNum14-mu0.04-rou100-TR10 10 40 40 100 200 400.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/50000-nodeNum14-mu0.04-rou100-TR{10,20,30,40,100,120,160,200,400}.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/50000-nodeNum14-mu0.04-rou200-TR{10,40,100,120,160,200}.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/50000-nodeNum14-mu0.04-rou200-TR{10,40,100}.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/100000resD.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/10000resD.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/1000resD.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/50000resD.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/AuxGraph/AuNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/AuxGraph/AuNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Common/CommonResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Common/CommonResource.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Gen/ServiceEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Gen/ServiceEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Topology/EventDealer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Topology/EventDealer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Topology/ResourceStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Topology/ResourceStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Topology/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Topology/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Topology/SimulationResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Topology/SimulationResult.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/AuxGraph/AuNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/AuxGraph/AuNode.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Common/CommonResource.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Common/CommonResource.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Gen/ServiceEvent.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Gen/ServiceEvent.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Topology/EventDealer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Topology/EventDealer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Topology/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Topology/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Topology/SimulationResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Topology/SimulationResult.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -103,62 +102,62 @@
     <session id="462212407">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="77" />
-          <entry key="project.open.time.1" value="8" />
+          <entry key="project.closed" value="85" />
+          <entry key="project.open.time.1" value="10" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.16" value="1" />
           <entry key="project.open.time.17" value="5" />
           <entry key="project.open.time.18" value="6" />
           <entry key="project.open.time.19" value="6" />
-          <entry key="project.open.time.2" value="11" />
+          <entry key="project.open.time.2" value="12" />
           <entry key="project.open.time.20" value="1" />
           <entry key="project.open.time.21" value="2" />
           <entry key="project.open.time.22" value="9" />
-          <entry key="project.open.time.23" value="4" />
+          <entry key="project.open.time.23" value="5" />
           <entry key="project.open.time.24" value="2" />
           <entry key="project.open.time.29" value="2" />
-          <entry key="project.open.time.3" value="5" />
+          <entry key="project.open.time.3" value="7" />
           <entry key="project.open.time.30" value="1" />
           <entry key="project.open.time.34" value="1" />
           <entry key="project.open.time.35" value="1" />
           <entry key="project.open.time.37" value="1" />
-          <entry key="project.open.time.4" value="5" />
+          <entry key="project.open.time.4" value="7" />
           <entry key="project.open.time.40" value="1" />
           <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.52" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="77" />
+          <entry key="project.opened" value="85" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="class" value="37" />
-          <entry key="java" value="316" />
-          <entry key="txt" value="27" />
+          <entry key="class" value="50" />
+          <entry key="java" value="339" />
+          <entry key="txt" value="41" />
           <entry key="xml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="CLASS" value="37" />
-          <entry key="JAVA" value="316" />
-          <entry key="PLAIN_TEXT" value="27" />
+          <entry key="CLASS" value="50" />
+          <entry key="JAVA" value="339" />
+          <entry key="PLAIN_TEXT" value="41" />
           <entry key="XML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="class" value="5" />
-          <entry key="java" value="28690" />
-          <entry key="txt" value="42" />
+          <entry key="java" value="29937" />
+          <entry key="txt" value="82" />
           <entry key="xml" value="23" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CLASS" value="5" />
-          <entry key="JAVA" value="28690" />
-          <entry key="PLAIN_TEXT" value="42" />
+          <entry key="JAVA" value="29937" />
+          <entry key="PLAIN_TEXT" value="82" />
           <entry key="XML" value="23" />
         </counts>
       </usages-collector>
@@ -169,22 +168,38 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/Topology/EventDealer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="1195" column="32" lean-forward="true" selection-start-line="1195" selection-start-column="32" selection-end-line="1195" selection-end-column="32" />
+            <state relative-caret-position="177">
+              <caret line="398" column="39" lean-forward="true" selection-start-line="398" selection-start-column="39" selection-end-line="398" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#10852#10867#0" expanded="true" />
-                <element signature="e#36535#36541#0" expanded="true" />
+                <element signature="e#10978#10993#0" expanded="true" />
+                <element signature="e#12429#12444#0" expanded="true" />
+                <element signature="e#20568#20583#0" expanded="true" />
+                <element signature="e#36753#36759#0" expanded="true" />
+                <element signature="e#54229#54230#0" expanded="true" />
+                <element signature="e#54267#54268#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Topology/ResourceStatus.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Gen/ServiceEvent.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="389">
-              <caret line="82" column="5" selection-start-line="82" selection-start-column="5" selection-end-line="82" selection-end-column="5" />
+            <state relative-caret-position="227">
+              <caret line="28" column="44" selection-start-line="28" selection-start-column="44" selection-end-line="28" selection-end-column="44" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Topology/Link.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="296">
+              <caret line="71" selection-start-line="71" selection-end-line="71" />
+              <folding>
+                <element signature="e#361#375#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -192,8 +207,23 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/AuxGraph/AuNode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="9" column="32" selection-start-line="9" selection-start-column="32" selection-end-line="9" selection-end-column="32" />
+            <state relative-caret-position="230">
+              <caret line="32" selection-start-line="32" selection-end-line="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/AuxGraph/AuAccessEdge.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="66">
+              <caret line="3" selection-start-line="3" selection-end-line="3" />
+              <folding>
+                <element signature="e#153#154#0" expanded="true" />
+                <element signature="e#201#202#0" expanded="true" />
+                <element signature="e#422#423#0" expanded="true" />
+                <element signature="e#462#463#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -201,8 +231,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Topology/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="601">
-              <caret line="45" column="46" selection-start-line="45" selection-start-column="38" selection-end-line="45" selection-end-column="53" />
+            <state relative-caret-position="827">
+              <caret line="52" column="88" lean-forward="true" selection-start-line="52" selection-start-column="88" selection-end-line="52" selection-end-column="88" />
             </state>
           </provider>
         </entry>
@@ -210,8 +240,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Common/CommonResource.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
-              <caret line="29" column="67" selection-start-line="29" selection-start-column="67" selection-end-line="29" selection-end-column="67" />
+            <state relative-caret-position="114">
+              <caret line="50" column="40" lean-forward="true" selection-start-line="50" selection-start-column="40" selection-end-line="50" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -231,8 +261,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/90res.txt" />
-        <option value="$PROJECT_DIR$/100res.txt" />
         <option value="$PROJECT_DIR$/src/main/java/Topology/Tree.java" />
         <option value="$PROJECT_DIR$/NSFnetRes1.txt" />
         <option value="$PROJECT_DIR$/NSFnetRes2.txt" />
@@ -245,7 +273,6 @@
         <option value="$PROJECT_DIR$/Tree300resD.txt" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/Gen/EventType.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Gen/Generator.java" />
         <option value="$PROJECT_DIR$/src/main/java/Topology/Graph.java" />
         <option value="$PROJECT_DIR$/NSFnetIPPortRes.txt" />
         <option value="$PROJECT_DIR$/src/main/java/Common/DoubleHash.java" />
@@ -263,7 +290,6 @@
         <option value="$PROJECT_DIR$/src/main/java/Topology/PathCalculate.java" />
         <option value="$PROJECT_DIR$/src/main/java/Gen/Event.java" />
         <option value="$PROJECT_DIR$/src/main/java/Topology/Path.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Topology/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/Topology/auAccessEdge.java" />
         <option value="$PROJECT_DIR$/src/main/java/Topology/AccessEdge.java" />
         <option value="$PROJECT_DIR$/src/main/java/Topology/AuGraph.java" />
@@ -275,12 +301,16 @@
         <option value="$PROJECT_DIR$/src/main/java/AuxGraph/AuAccessEdge.java" />
         <option value="$PROJECT_DIR$/src/main/java/Topology/Node.java" />
         <option value="$PROJECT_DIR$/src/main/java/Gen/CoSerEG.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Gen/ServiceEvent.java" />
         <option value="$PROJECT_DIR$/src/main/java/Gen/ServerGenerator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Topology/SimulationResult.java" />
         <option value="$PROJECT_DIR$/src/main/java/AuxGraph/AuNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Common/CommonResource.java" />
         <option value="$PROJECT_DIR$/src/main/java/Topology/ResourceStatus.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Gen/Generator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Topology/SimulationResult.java" />
+        <option value="$PROJECT_DIR$/50000-nodeNum14-mu0.04-rou100-TR{10,20,30,40,100,120,160,200,400}.txt" />
+        <option value="$PROJECT_DIR$/src/main/java/Common/CommonResource.java" />
+        <option value="$PROJECT_DIR$/testCRs.txt" />
+        <option value="$PROJECT_DIR$/src/main/java/Topology/Main.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Gen/ServiceEvent.java" />
         <option value="$PROJECT_DIR$/src/main/java/Topology/EventDealer.java" />
       </list>
     </option>
@@ -422,7 +452,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -502,14 +531,15 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="lastOne&#9;null&#9;null&#10;resLogger&#9;PSI&#9;JAVA://Topology.ResourceStatus#ResLogger&#10;resourceSlot&#9;ACTION&#9;null&#10;genL&#9;PSI&#9;JAVA://Utils.ReadTopo#genLinkList&#10;KeysNum&#9;PSI&#9;JAVA://Gen.ServerGenerator#genRandomKeysNum&#10;keysNum&#9;PSI&#9;JAVA://Gen.ServerGenerator#genRandomKeysNum" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1584588109928" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../AGGroomingMixedGrid0" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1585578630759" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="project.structure.last.edited" value="模块" />
     <property name="project.structure.proportion" value="0.15" />
@@ -525,6 +555,7 @@
       <recent name="Gen" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Zqc\0.MyProject\AGGroomingMixedGrid" />
       <recent name="C:\Zqc\0.MyProject\AGGroomingMixedGrid\src\main\java\Network" />
       <recent name="C:\Zqc\0.MyProject\AGGroomingMixedGrid\src\main\java\Topology" />
       <recent name="$PROJECT_DIR$" />
@@ -780,11 +811,19 @@
       <workItem from="1584521765942" duration="1977000" />
       <workItem from="1584527879039" duration="2736000" />
       <workItem from="1584576921507" duration="7205000" />
+      <workItem from="1584624847458" duration="3233000" />
+      <workItem from="1584664884489" duration="4037000" />
+      <workItem from="1584955231489" duration="5094000" />
+      <workItem from="1585297712913" duration="16380000" />
+      <workItem from="1585317591300" duration="4204000" />
+      <workItem from="1585354625889" duration="9043000" />
+      <workItem from="1585365355194" duration="2677000" />
+      <workItem from="1585558519713" duration="13902000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="458282000" />
+    <option name="totallyTimeSpent" value="516852000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -799,8 +838,42 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.27345845" />
-      <window_info active="true" id="Structure" order="1" visible="true" weight="0.308311" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.31903484" />
+      <window_info id="Structure" order="1" visible="true" weight="0.3197051" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Designer" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Capture Tool" order="5" />
+      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info id="设计器" order="7" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.13617021" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.26666668" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.23880596" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32765958" />
+      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32765958" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.32967034" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.28085107" />
+      <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="调试" order="12" weight="0.3617021" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Capture Analysis" order="4" />
+      <window_info anchor="right" id="Theme Preview" order="5" />
+      <window_info anchor="right" id="Database" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Maven Projects" order="8" weight="0.3297587" />
+      <window_info anchor="right" id="调色板" order="9" />
+      <window_info anchor="right" id="Coverage" order="10" side_tool="true" weight="0.3297587" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28150135" />
+      <window_info id="Structure" order="1" weight="0.31233245" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
@@ -809,7 +882,7 @@
       <window_info id="设计器" order="7" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.33427763" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.20141844" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3134752" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.23880596" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -831,39 +904,6 @@
       <window_info anchor="right" id="Maven Projects" order="8" weight="0.3297587" />
       <window_info anchor="right" id="调色板" order="9" />
       <window_info anchor="right" id="Coverage" order="10" side_tool="true" weight="0.3297587" />
-    </layout>
-    <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24865952" />
-      <window_info id="Structure" order="1" weight="0.25" />
-      <window_info id="Image Layers" order="2" />
-      <window_info id="Designer" order="3" />
-      <window_info id="UI Designer" order="4" />
-      <window_info id="Capture Tool" order="5" />
-      <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info id="设计器" order="7" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3286119" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.19830029" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.23880596" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.329602" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.32967034" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.15155807" />
-      <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
-      <window_info anchor="bottom" id="调试" order="12" weight="0.42634562" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="Capture Analysis" order="4" />
-      <window_info anchor="right" id="Theme Preview" order="5" />
-      <window_info anchor="right" id="Database" order="6" />
-      <window_info anchor="right" id="Palette&#9;" order="7" />
-      <window_info anchor="right" id="Maven Projects" order="8" weight="0.3297587" />
-      <window_info anchor="right" id="调色板" order="9" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -882,58 +922,39 @@
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Topology/SimulationResult.java</url>
-          <line>147</line>
+          <url>file://$PROJECT_DIR$/src/main/java/Topology/EventDealer.java</url>
+          <line>369</line>
           <properties />
-          <option name="timeStamp" value="61" />
+          <option name="timeStamp" value="123" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Topology/SimulationResult.java</url>
+          <line>143</line>
+          <properties />
+          <option name="timeStamp" value="130" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Topology/Main.java</url>
+          <line>65</line>
+          <properties />
+          <option name="timeStamp" value="138" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Topology/EventDealer.java</url>
-          <line>940</line>
+          <line>405</line>
           <properties />
-          <option name="timeStamp" value="85" />
+          <option name="timeStamp" value="170" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Topology/EventDealer.java</url>
+          <line>227</line>
+          <properties />
+          <option name="timeStamp" value="173" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_144/src.zip!/java/util/HashMap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11264">
-          <caret line="553" column="13" selection-start-line="553" selection-start-column="13" selection-end-line="553" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_144/src.zip!/java/lang/Object.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1983">
-          <caret line="210" column="7" selection-start-line="210" selection-start-column="7" selection-end-line="210" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_144/src.zip!/java/lang/Boolean.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="131" selection-start-line="131" selection-end-line="131" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/500resD.txt" />
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_144/src.zip!/java/lang/Integer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17534">
-          <caret line="830" selection-start-line="830" selection-end-line="830" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/5000resD.txt" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/Gen/EventType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="11" column="23" lean-forward="true" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Network/Connection.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -1059,13 +1080,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/jgrapht/jgrapht-core/0.9.1/jgrapht-core-0.9.1.jar!/org/jgrapht/graph/GraphPathImpl.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="39" selection-start-line="39" selection-end-line="39" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_144/src.zip!/java/lang/Class.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="140">
@@ -1094,30 +1108,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Topology/Link.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="89" column="22" lean-forward="true" selection-start-line="89" selection-start-column="22" selection-end-line="89" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/jgrapht/jgrapht-core/0.9.1/jgrapht-core-0.9.1.jar!/org/jgrapht/graph/DefaultEdge.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Gen/Event.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1232">
-          <caret line="63" selection-start-line="63" selection-end-line="63" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Gen/CoSerEG.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
@@ -1132,45 +1122,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/AuxGraph/AuGraph.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="11" column="60" lean-forward="true" selection-start-line="11" selection-start-column="60" selection-end-line="11" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/AuxGraph/AuxPath.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="174">
           <caret line="12" column="40" selection-start-line="12" selection-start-column="11" selection-end-line="12" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/jgrapht/jgrapht-core/0.9.1/jgrapht-core-0.9.1.jar!/org/jgrapht/graph/DefaultWeightedEdge.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Gen/ServiceEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="26" column="33" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Gen/Generator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="11" column="30" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Gen/ServerGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="27" column="48" selection-start-line="27" selection-start-column="48" selection-end-line="27" selection-end-column="48" />
         </state>
       </provider>
     </entry>
@@ -1181,11 +1136,162 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.12/slf4j-api-1.7.12.jar!/org/slf4j/LoggerFactory.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="424">
+          <caret line="168" selection-start-line="168" selection-end-line="168" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/AuxGraph/AuGraph.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="25" selection-start-line="25" selection-end-line="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/50000-nodeNum14-mu0.04-rou200-TR{10,40,100}.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="8" column="27" selection-start-line="8" selection-start-column="27" selection-end-line="8" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/50000-nodeNum14-mu0.04-rou200-TR{10,40,100,120,160,200}.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="8" column="30" selection-start-line="8" selection-start-column="30" selection-end-line="8" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Gen/Generator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="333">
+          <caret line="22" column="29" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Topology/SimulationResult.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2970">
+          <caret line="143" selection-start-line="143" selection-end-line="143" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Gen/ServerGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1144">
+          <caret line="59" selection-start-line="59" selection-end-line="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/50000-nodeNum14-mu0.04-rou100-TR10 10 40 40 100 200 400.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="77" selection-start-line="77" selection-end-line="77" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Gen/Event.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="78">
+          <caret line="55" selection-start-line="55" selection-end-line="55" />
+          <folding>
+            <element signature="e#1355#1356#0" expanded="true" />
+            <element signature="e#1481#1482#0" expanded="true" />
+            <element signature="e#1511#1512#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jgrapht/jgrapht-core/0.9.1/jgrapht-core-0.9.1.jar!/org/jgrapht/graph/GraphPathImpl.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="39" selection-start-line="39" selection-end-line="39" />
+          <folding>
+            <element signature="e#978#979#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/50000-nodeNum14-mu0.04-rou100-TR{10,20,30,40,100,120,160,200,400}.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="3" column="32" lean-forward="true" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Topology/ResourceStatus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="427">
+          <caret line="75" selection-start-line="75" selection-end-line="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testCRs.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="3" column="52" selection-start-line="3" selection-start-column="52" selection-end-line="3" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Common/CommonResource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="50" column="40" lean-forward="true" selection-start-line="50" selection-start-column="40" selection-end-line="50" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Topology/Link.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="296">
+          <caret line="71" selection-start-line="71" selection-end-line="71" />
+          <folding>
+            <element signature="e#361#375#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Gen/ServiceEvent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="28" column="44" selection-start-line="28" selection-start-column="44" selection-end-line="28" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jgrapht/jgrapht-core/0.9.1/jgrapht-core-0.9.1.jar!/org/jgrapht/graph/IntrusiveEdge.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jgrapht/jgrapht-core/0.9.1/jgrapht-core-0.9.1.jar!/org/jgrapht/graph/DefaultEdge.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
+          <folding>
+            <element signature="e#392#393#0" expanded="true" />
+            <element signature="e#426#427#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jgrapht/jgrapht-core/0.9.1/jgrapht-core-0.9.1.jar!/org/jgrapht/graph/DefaultWeightedEdge.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/AuxGraph/AuAccessEdge.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
+        <state relative-caret-position="66">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
           <folding>
+            <element signature="e#153#154#0" expanded="true" />
+            <element signature="e#201#202#0" expanded="true" />
+            <element signature="e#422#423#0" expanded="true" />
             <element signature="e#462#463#0" expanded="true" />
           </folding>
         </state>
@@ -1193,47 +1299,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/AuxGraph/AuNode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="9" column="32" selection-start-line="9" selection-start-column="32" selection-end-line="9" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Topology/SimulationResult.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="133" column="39" selection-start-line="133" selection-start-column="39" selection-end-line="133" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Common/CommonResource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="29" column="67" selection-start-line="29" selection-start-column="67" selection-end-line="29" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Topology/ResourceStatus.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="389">
-          <caret line="82" column="5" selection-start-line="82" selection-start-column="5" selection-end-line="82" selection-end-column="5" />
+        <state relative-caret-position="230">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Topology/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="601">
-          <caret line="45" column="46" selection-start-line="45" selection-start-column="38" selection-end-line="45" selection-end-column="53" />
+        <state relative-caret-position="827">
+          <caret line="52" column="88" lean-forward="true" selection-start-line="52" selection-start-column="88" selection-end-line="52" selection-end-column="88" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Topology/EventDealer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="1195" column="32" lean-forward="true" selection-start-line="1195" selection-start-column="32" selection-end-line="1195" selection-end-column="32" />
+        <state relative-caret-position="177">
+          <caret line="398" column="39" lean-forward="true" selection-start-line="398" selection-start-column="39" selection-end-line="398" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#10852#10867#0" expanded="true" />
-            <element signature="e#36535#36541#0" expanded="true" />
+            <element signature="e#10978#10993#0" expanded="true" />
+            <element signature="e#12429#12444#0" expanded="true" />
+            <element signature="e#20568#20583#0" expanded="true" />
+            <element signature="e#36753#36759#0" expanded="true" />
+            <element signature="e#54229#54230#0" expanded="true" />
+            <element signature="e#54267#54268#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -43,9 +43,16 @@ public class Main {
         linkList = topo.getLinkList();
         DefaultDirectedWeightedGraph<Node, AccessEdge> graphG = new Graph(CommonResource.nodeList,linkList).getG(); //默认有向加权图
 
-        ServerGenerator serverG = new ServerGenerator(CommonResource.NODE_NUMBER,0.04,100,
-                CommonResource.numConnectionRequest,0, CommonResource.transmissionRateSet.length);
-        List<ServiceEvent> serviceList = serverG.genEventQueue();
+        //gen and output serList to txt
+//        ServerGenerator serverG = new ServerGenerator(CommonResource.NODE_NUMBER,0.04,100,
+//                CommonResource.numConnectionRequest,0, CommonResource.transmissionRateSet.length);
+//        List<ServiceEvent> serviceList = serverG.genEventQueue();
+//        fileName = CommonResource.numConnectionRequest+"-nodeNum"+CommonResource.NODE_NUMBER+"-mu0.04-rou100-TR10 10 40 40 100 200 400.txt";
+//        CommonResource.writeSerListToTXT(fileName,serviceList);
+        //read serList from txt
+        String fileName = "50000-nodeNum14-mu0.04-rou200-TR{10,40,100,120,160,200}.txt";
+//        String fileName = "testCRs.txt";
+        List<ServiceEvent> serviceList = CommonResource.readSerListFromTXT(fileName);
 
         EventDealer eventDealer = new EventDealer(serviceList,graphG,CommonResource.nodeList,linkList);
         eventDealer.doDeal();
