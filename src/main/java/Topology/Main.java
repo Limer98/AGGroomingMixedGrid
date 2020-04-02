@@ -52,6 +52,7 @@ public class Main {
         //read serList from txt
         String fileName = "50000-nodeNum14-mu0.04-rou200-TR{10,40,100,120,160,200}.txt";
 //        String fileName = "testCRs.txt";
+//        String fileName = "50000-nodeNum14-mu0.04-rou100-TR{10,20,30,40,100,120,160,200,400}.txt";
         List<ServiceEvent> serviceList = CommonResource.readSerListFromTXT(fileName);
 
         EventDealer eventDealer = new EventDealer(serviceList,graphG,CommonResource.nodeList,linkList);
