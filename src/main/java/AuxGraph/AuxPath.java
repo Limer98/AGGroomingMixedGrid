@@ -30,6 +30,18 @@ public class AuxPath {
 //        this.auEdgeList = new ArrayList<AccessEdge>();
 //        Object a = auGPath.getEdgeList();
         this.auEdgeList = (List<AuAccessEdge>) auGPath.getEdgeList();
+        /** new **/
+
+        for (AuAccessEdge edge:this.auEdgeList) {
+            if (edge.getAuSource().nodeID == edge.getAuDest().nodeID){//在同一节点内
+                edge.physHops = 0;
+            }else if (edge.getAuSource().NodeType!=2&&edge.getAuDest().NodeType!=3){//去除了电疏导边
+                edge.physHops = 1;
+            }else{//电疏导边的物理跳数是由一起疏导的请求经过的物理跳数决定的
+
+            }
+        }
+        /** --- **/
     }
     public List<AuNode> calAuGPathNodeList(){
         List<AuNode> auNodeList1 = new ArrayList<AuNode>();

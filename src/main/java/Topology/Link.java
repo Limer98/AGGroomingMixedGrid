@@ -15,7 +15,8 @@ public class Link {
     public int srcSeq; //源点
     public int dstSeq;
     public double weight;
-    public List<ServiceEvent> serviceOnLink = new ArrayList<ServiceEvent>();
+//    public List<ServiceEvent> serviceOnLink = new ArrayList<ServiceEvent>();
+    public HashMap<Integer,ServiceEvent> serviceOnLink = new HashMap<Integer,ServiceEvent>();//key is physHops on the Link
     private boolean[] slots; //slot的占用情况
 //    public boolean containFixed = false;
 

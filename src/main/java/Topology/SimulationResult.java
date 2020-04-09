@@ -97,17 +97,14 @@ public class SimulationResult {
 
     //以连接请求个数为变量
     //numRequest change
-    public void outputResToFile(){
+    public void outputResToFile(double rou){
         int sum = serviceMap.size();
         int sumService = 0;
-        int count = 0;//calcute partial
-        int countTotal = 0;//count total success
-        int step = 50;
-        double aTemp;
+        int count = 0;
         double energyConsumed = 0;
+        int totalVirHops = 0;
+        int totalPhysHops = 0;
         boolean flag;
-        ArrayList<Double> successRadio = new ArrayList<Double>();
-        ArrayList<Double> totalSuccessRadio = new ArrayList<Double>();
         for (int i = 0; i < serviceMap.size(); i++) {
 
             if(isTree){
@@ -119,52 +116,47 @@ public class SimulationResult {
             if (flag){
                 count++;
                 energyConsumed += serviceMap.get(i).energyConsumed;
+                totalVirHops += serviceMap.get(i).virHops;
+                totalPhysHops += serviceMap.get(i).physHops;
             }
-
-            if((i+1)%step==0){
-                aTemp = (double)count/(double)(i+1);
-                successRadio.add(aTemp);
-            }
-
-//            if (count == CommonResource.numConnectionRequest-5000){
-//                System.out.println("totalEnergy: "+energyConsumed);
-//            }
-
         }
-        String fileName;
-        if(isTree)
-            fileName = "Tree"+sum+"resD.txt";
-        else
-            fileName =  sum+"resD.txt";
 
-        System.out.println(count +" "+ sum);
-
-//        System.out.println(countTotal +" "+ sumService);
+        double successRatio = (double)count/sum;
         double aveEnergy = energyConsumed/count;
-        System.out.println("totalEnergy: "+energyConsumed);
-        System.out.println("aveEnergy: "+aveEnergy);
+        double aveVirHops = (double) totalVirHops/count;
+        double avePhysHops = (double) totalPhysHops/count;
+        System.out.println(rou+"\t"+aveEnergy+"\t"+successRatio+"\t"+energyConsumed+"\t"+aveVirHops+"\t"+avePhysHops);
 
-//        writeArrayToTxt(fileName,successRadio);
+//        writeArrayToTxt(fileName,rou,successRatio,energyConsumed,aveEnergy);
     }
 
-    public void writeArrayToTxt( String string,ArrayList<Double> successRadio) {
+    public void writeArrayToTxt(String string, int rou, double successRatio, double energyConsumed, double aveEnergy) {
         System.out.println(string);
-        int rowNum = successRadio.size();
-        int columnNum = 1;
+        int rowNum = 1;//行
+        int columnNum = 1;//列
         try {
             FileWriter fw = new FileWriter(string);
+            for (int i = 0; i < rowNum; i++){
+                for (int j = 0; j < columnNum;j++){
+                    fw.write(rou+"\t");
+                    fw.write(successRatio+"\t");
+                    fw.write(energyConsumed+"\t");
+                    fw.write(aveEnergy+"\t");
+                    fw.write("\n");
+                }
+            }
 
-            fw.write("successRadio:"+"\n");
+//            fw.write("successRadio:"+"\n");
 /*            for (int i = 0; i < successRadio.size(); i++) {
                 fw.write(successRadio.get(i)+"\t");
             }*/
-            for (int i = 0; i < rowNum; i++) {
-                for (int j = 0; j < columnNum; j++)
-                    fw.write(successRadio.get(i)+ "\t");
-                fw.write("\n");
-            }
+//            for (int i = 0; i < rowNum; i++) {
+//                for (int j = 0; j < columnNum; j++)
+//                    fw.write(successRadio.get(i)+ "\t");
+//                fw.write("\n");
+//            }
 
-            fw.close();
+//            fw.close();
         }
         catch (IOException e){
             e.printStackTrace();

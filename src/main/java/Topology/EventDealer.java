@@ -5,7 +5,6 @@ import Common.CommonResource;
 import Gen.CoSerEG;
 import Gen.EventType;
 import Gen.ServiceEvent;
-import Utils.Pair;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +20,7 @@ import java.util.*;
 public class EventDealer {
     private static final Logger log = LoggerFactory.getLogger(EventDealer.class);
 
-    public List<ServiceEvent> serviceList;
+    private List<ServiceEvent> serviceList;
     DefaultDirectedWeightedGraph<Node, AccessEdge> graphG;
     List<Node> nodeList;
     List<Link> linkList;
@@ -64,7 +63,7 @@ public class EventDealer {
 
 
 
-    public void operationsForSERVICE_ARRIVAL(ServiceEvent s){
+    private void operationsForSERVICE_ARRIVAL(ServiceEvent s){
 //        if (s.eventId==13826){
 //            System.out.println("s.eventId==13826wrong");
 //        }
@@ -87,8 +86,8 @@ public class EventDealer {
         }*/
         s.ownPath=p; //ServiceEvent extends Event
         //测试
-        System.out.println(s.getEventId()+" "+s.obtainHappenTime()+" "
-                +s.getEventType().toString()+" "+s.getSrc()+"-"+s.getDst()+" TR:"+s.getTransmissionRate());
+//        System.out.println(s.getEventId()+" "+s.obtainHappenTime()+" "
+//                +s.getEventType().toString()+" "+s.getSrc()+"-"+s.getDst()+" TR:"+s.getTransmissionRate());
 
         //generate virtual graph for a serviceEvent
         AuxPath aP = calcuAuxPath(s);
@@ -128,13 +127,15 @@ public class EventDealer {
             CommonResource.ongoingServiceMap.put(s.eventId,s);
 //            calcuEnergyConsumed(s);
             calcuEnergyConsumedGeneral(s);
+            calcuVirHopsGeneral(s);
+            calcuPhysHopsGeneral(s);
         }
         serviceMap.put(s.getEventId(),s);
     }
 
 
 
-    public void operationsForSERVICE_END(ServiceEvent s){
+    private void operationsForSERVICE_END(ServiceEvent s){
 
         //update resource status,update remaining capacity of transponders and IP ports
                 //updateResource(s.getArriveTime());
@@ -174,59 +175,7 @@ public class EventDealer {
 
     }
 
-    //(establish a new lightpath)for transponder and IP port resources of nodes
-/*    public boolean updateResource_newLP(Path p, ServiceEvent s){
-        Node source = p.gPath.getStartVertex();
-        Node dest = p.gPath.getEndVertex();
-
-        boolean flagFound1 = false;
-        int requestResNum1 = CommonResource.calcuRequestResNum(source.isFixedNode,s.transmissionRate);
-        for (int i = 0; i < source.resPerNode.size(); i++){
-            if (source.resPerNode.get(i).TxResource >= requestResNum1){
-                flagFound1 = true;
-                break;
-            }
-        }
-        boolean flagFound2 = false;
-        int requestResNum2 = CommonResource.calcuRequestResNum(dest.isFixedNode,s.transmissionRate);
-        for (int i = 0; i < dest.resPerNode.size(); i++){
-            if (dest.resPerNode.get(i).RxResource >= requestResNum2){
-                flagFound2 = true;
-                break;
-            }
-        }
-        if (flagFound1 & flagFound2){ //check and then update
-            int srcTranID=-1;
-            for (int i = 0; i < source.resPerNode.size(); i++){
-                if (source.resPerNode.get(i).TxResource >= requestResNum1){
-                    source.resPerNode.get(i).TxResource -= requestResNum1;
-                    HashMap<Integer,ConsumCapType> temp = source.resPerNode.get(i).ResLogger;
-                    temp.put(s.eventId,new ConsumCapType(requestResNum1,s.transmissionRate,true));
-                    srcTranID = i;
-                    break;
-                }
-            }
-            int dstTranID=-1;
-            for (int i = 0; i < dest.resPerNode.size(); i++){
-                if (dest.resPerNode.get(i).RxResource >= requestResNum2){
-                    dest.resPerNode.get(i).RxResource -= requestResNum2;
-                    HashMap<Integer,ConsumCapType> temp = dest.resPerNode.get(i).ResLogger;
-                    temp.put(s.eventId,new ConsumCapType(requestResNum2,s.transmissionRate,false));
-                    dstTranID = i;
-                    break;
-                }
-            }
-            s.pairTransID = new Pair<>(srcTranID,dstTranID);
-            s.pairTransUsedNum = new Pair<>(requestResNum1,requestResNum2);
-        }
-
-        return flagFound1 & flagFound2;
-    }*/
-
-    public boolean updateResource_agSinglePath(AuxPath aP,ServiceEvent s,int splitID){
-        if (s.eventId==3679){
-            System.out.println("s.eventId==3679");
-        }
+    private boolean updateResource_agSinglePath(AuxPath aP,ServiceEvent s,int splitID){
         aP.setAuGPathEdgeList();
         aP.setAuGPathNodeList();
         s.OEOLogger = new ArrayList<AuNode>();
@@ -294,26 +243,37 @@ public class EventDealer {
                 AuNode downNode = aP.auNodeList.get(i+1);
                 if (downNode.NodeType == 3){
                     AuAccessEdge auAccessEdge = new AuAccessEdge();
+                    //找到对应的auAccessEdge
                     for (int t = 0; t < aP.auEdgeList.size(); t++) {
                         AuAccessEdge tempEdge = aP.auEdgeList.get(t);
                         if (tempEdge.getAuSource().auNodeID == tempNode.auNodeID &&
                                 tempEdge.getAuDest().auNodeID == downNode.auNodeID) {
-                            auAccessEdge = tempEdge;
+                            auAccessEdge = tempEdge;//地址引用关系
+                            break;
                         }
                     }
                     Link link = new Link(tempNode.auNodeID,downNode.auNodeID,auAccessEdge.getWeight());
                     if (CommonResource.virLinkList.contains(link)){
                         int index = CommonResource.virLinkList.indexOf(link);
-                        List<ServiceEvent> serOnLink = CommonResource.virLinkList.get(index).serviceOnLink;
-                        //first fit
+                        HashMap<Integer,ServiceEvent> serOnLink = CommonResource.virLinkList.get(index).serviceOnLink;
+                        //按physHops排序后，first fit
+                        Iterator iter = serOnLink.entrySet().iterator();
+                        ServiceEvent serOnLink0 = new ServiceEvent();
+                        while (iter.hasNext()){//取第一个
+                            HashMap.Entry entry = (HashMap.Entry) iter.next();
+//                            Object physHops = entry.getKey();
+                            Object tempSer = entry.getValue();
+                            serOnLink0 = (ServiceEvent) tempSer;
+                            break;
+                        }
                         AuNode auNodeSrc = auAccessEdge.getAuSource();
                         AuNode auNodeDst = auAccessEdge.getAuDest();
 
                         //source node
-                        AuNode auTransNodeSrc = updateResEG(serOnLink.get(0),s,splitID,auNodeSrc,auAccessEdge,true);
+                        AuNode auTransNodeSrc = updateResEG(serOnLink0,s,splitID,auNodeSrc,auAccessEdge,true);
 
                         //destination node
-                        AuNode auTransNodeDst = updateResEG(serOnLink.get(0),s,splitID,auNodeDst,auAccessEdge,false);
+                        AuNode auTransNodeDst = updateResEG(serOnLink0,s,splitID,auNodeDst,auAccessEdge,false);
 
                         s.OEOLogger.add(auTransNodeSrc);
                         s.OEOLogger.add(auTransNodeDst);
@@ -362,8 +322,8 @@ public class EventDealer {
         return true;
     }
 
-    public AuNode updateResEG(ServiceEvent serOnLink0,ServiceEvent s,int splitID,AuNode auNode,AuAccessEdge auAccessEdge,boolean isTx){
-
+    private AuNode updateResEG(ServiceEvent serOnLink0,ServiceEvent s,int splitID,AuNode auNode,AuAccessEdge auAccessEdge,boolean isTx){
+        //auAccessEdge是当前要电疏导分配资源的边
         AuNode auTransNode = new AuNode(auNode,auNode.auNodeID-2,auNode.NodeType-2);
         int Index = serOnLink0.OEOLogger.indexOf(auTransNode);
         if (Index == -1){
@@ -371,21 +331,15 @@ public class EventDealer {
         }
         double nodeResSlot = CommonResource.calcuResourceSlot(auTransNode.isFixed);
         AuNode auNode0 = serOnLink0.OEOLogger.get(Index);
-//        auTransNode.resourceStatus = new ResourceStatus(auNode0.resourceStatus);
         auTransNode.resourceStatus = auNode0.resourceStatus;
-        int nodeTranID = auNode0.resourceStatus.transID;
-        Node node = nodeList.get(auNode0.nodeID-1);
-//        int requestResNum = CommonResource.calcuRequestResNum(node.isFixedNode,s.transmissionRate);
-//                    source.resPerNode.get(srcTranID).TxResource -= requestResNum;
-//        HashMap<Integer,List<ConsumCapType>> tempMap = node.resPerNode.get(nodeTranID).ResLogger;
+//        int nodeTranID = auNode0.resourceStatus.transID;
+//        Node node = nodeList.get(auNode0.nodeID-1);
         HashMap<Integer,List<ConsumCapType>> tempMap = auTransNode.resourceStatus.ResLogger;
 
         int serLoggerIndex = 0;
         List<ConsumCapType> consumCapTypeList0 = tempMap.get(serOnLink0.eventId);
         for (int i = 0; i < consumCapTypeList0.size(); i++){//首次加clubEG号。还要考虑多光路记录在同一个trans里的情况
-//            if (consumCapTypeList0.size()>1){
-//                System.out.println("ss");
-//            }//找到该子业务对应的consumCapType记录条，用serLoggerIndex记录序号
+            //找到该子业务对应的consumCapType记录条，用serLoggerIndex记录序号
             if (consumCapTypeList0.get(i).splitID==serOnLink0.splitID && consumCapTypeList0.get(i).isTx == isTx){
                 //出现consumCapTypeList0.size()>1，都是按100Gbps分割的，不管固定节点或灵活节点
                 //nodeEGCap是网络中在线业务占用的粒度容量
@@ -398,7 +352,7 @@ public class EventDealer {
                     //satisfy electrical grooming constraint
                     serLoggerIndex = i;
                     if (consumCapTypeList0.get(i).clubEG == -1){
-                        consumCapTypeList0.get(i).clubEG = serOnLink0.eventId;//记录第一个clubEG号，即一组EG请求的clubEG初始
+                        consumCapTypeList0.get(i).clubEG = serOnLink0.eventId;//记录第一个clubEG号，即一组EG请求的clubEG初始值
                     }else {
 //                    System.out.println("lastOne.clubEG!=-1");
                     }
@@ -408,6 +362,30 @@ public class EventDealer {
             }
 
         }
+        //new: set physHops
+        int physHops = 0;
+        boolean flagStart = false;
+        for (AuAccessEdge edge:serOnLink0.ownAuPath.auEdgeList) {
+            if (edge.getAuSource().nodeID == auAccessEdge.getAuSource().nodeID
+                    && edge.getAuDest().nodeID == auAccessEdge.getAuDest().nodeID){
+                if (edge.physHops == 0){
+                    System.out.println("edge.physHops == 0");
+                }else{
+                    physHops += edge.physHops;
+                }
+            }else if (edge.getAuSource().nodeID == auAccessEdge.getAuSource().nodeID){
+                flagStart = true;
+            }else if (edge.getAuDest().nodeID == auAccessEdge.getAuDest().nodeID){
+                physHops += edge.physHops;
+                flagStart = false;
+                break;
+            }
+            if (flagStart){
+                physHops += edge.physHops;
+            }
+        }
+        auAccessEdge.physHops = physHops;
+        /////////////////////////
         int coReqResNum = consumCapTypeList0.get(serLoggerIndex).consumNums;
         int reqResNum = CommonResource.calcuRequestResNum(auNode.isFixed,s.transmissionRate);//原本需要的资源数
         if (tempMap.containsKey(s.eventId)){
@@ -419,9 +397,7 @@ public class EventDealer {
             if (conCapType.clubEG==-1){
                 conCapType.clubEG = consumCapTypeList0.get(serLoggerIndex).clubEG;
             }
-
             tempMap.get(s.eventId).add(conCapType);
-//                        tempMapSrc.get(s.eventId).add(new ConsumCapType(0,s.transmissionRate,true,requestResNumSrc));
         }else {
             List<ConsumCapType> tempList = new ArrayList<ConsumCapType>();
 
@@ -436,14 +412,12 @@ public class EventDealer {
             tempList.add(conCapType);
             tempMap.put(s.eventId,tempList);
         }
-
-//        auNode0.resourceStatus.ResLogger.get(serOnLink0.eventId);
         auTransNode.isEG = true;
         return auTransNode;
     }
 
 
-    public boolean updateResource_agMultiPath(ServiceEvent s){//check before update resource
+    private boolean updateResource_agMultiPath(ServiceEvent s){//check before update resource
         boolean flagForSuccess = true;
         calcuAplitNum(s);
 
@@ -492,7 +466,7 @@ public class EventDealer {
         return flagForSuccess;
     }
 
-    public boolean releaseResource(ServiceEvent s){
+    private void releaseResource(ServiceEvent s){
 
         /******* new *******/
 
@@ -522,10 +496,10 @@ public class EventDealer {
             }
         }
 
-        return true;
+//        return true;
     }
 
-    public boolean releaseTempResource(ServiceEvent s){//for assign multi lightpath failure
+    private void releaseTempResource(ServiceEvent s){//for assign multi lightpath failure
 
         if (s.splitNum==0){
             for (int i = 0; i < s.OEOLogger.size(); i++){
@@ -550,28 +524,28 @@ public class EventDealer {
             }
         }
 
-        return true;
+//        return true;
     }
-
-    public void releaseResPerNode(Node node,ServiceEvent s){
-        for (int i = 0; i < node.resPerNode.size(); i++){
-            if (node.resPerNode.get(i).ResLogger.containsKey(s.eventId)){
-                List<ConsumCapType> capTypeList = node.resPerNode.get(i).ResLogger.get(s.eventId);
-                for (int j = 0; j < capTypeList.size(); j++){
-                    ConsumCapType capType = capTypeList.get(j);
-                    int cap = capType.consumNums;
-                    if (capType.isTx){
-                        node.resPerNode.get(i).TxResource += cap;
-                    }else {
-                        node.resPerNode.get(i).RxResource += cap;
-                    }
-                    node.resPerNode.get(i).ResLogger.remove(s.eventId);
-                }
-//                break;//if find a logger satisfying the requirements, break;
-            }
-        }
-    }
-    public void releaseResPerTransNode(Node node,ServiceEvent s,int transID) {
+    //以node为单位，一个node里相关该请求的都删掉
+//    public void releaseResPerNode(Node node,ServiceEvent s){
+//        for (int i = 0; i < node.resPerNode.size(); i++){
+//            if (node.resPerNode.get(i).ResLogger.containsKey(s.eventId)){
+//                List<ConsumCapType> capTypeList = node.resPerNode.get(i).ResLogger.get(s.eventId);
+//                for (int j = 0; j < capTypeList.size(); j++){
+//                    ConsumCapType capType = capTypeList.get(j);
+//                    int cap = capType.consumNums;
+//                    if (capType.isTx){
+//                        node.resPerNode.get(i).TxResource += cap;
+//                    }else {
+//                        node.resPerNode.get(i).RxResource += cap;
+//                    }
+//                    node.resPerNode.get(i).ResLogger.remove(s.eventId);
+//                }
+////                break;//if find a logger satisfying the requirements, break;
+//            }
+//        }
+//    }
+    private void releaseResPerTransNode(Node node,ServiceEvent s,int transID) {
 
         List<ConsumCapType> capTypeList = node.resPerNode.get(transID).ResLogger.get(s.eventId);
 
@@ -713,21 +687,8 @@ public class EventDealer {
             }
         }
     }
-/*    public boolean checkElecGrooming(Node node,ServiceEvent s,ServiceEvent currentSer){
-        for (int i = 0; i < node.resPerNode.size(); i++){
-            if (node.resPerNode.get(i).ResLogger.containsKey(s.eventId)){
-                ConsumCapType capType = node.resPerNode.get(i).ResLogger.get(s.eventId);
-                int cap = capType.consumNums;
-                if (capType.isTx){
-                    return node.resPerNode.get(i).TxResource;
-                }else {
-                    return node.resPerNode.get(i).RxResource;
-                }
-            }
-        }
-    }*/
 
-    public List<AuNode> genAuNodeList(List<Node> nodeList,ServiceEvent s){
+    private List<AuNode> genAuNodeList(List<Node> nodeList,ServiceEvent s){
         List<AuNode> auNodeList = new ArrayList<AuNode>();
         int auNodeID = 0;
         for (Node node:nodeList){ //per node
@@ -768,7 +729,7 @@ public class EventDealer {
         return auNodeList;
     }
 
-    public void calcuAplitNum(ServiceEvent s){
+    private void calcuAplitNum(ServiceEvent s){
         s.splitNum = (int)Math.ceil((double)s.transmissionRate/CommonResource.GbpsNSTransponder);
         s.subSerList = new ArrayList<ServiceEvent>();
         for (int j = 0; j < s.splitNum-1; j++){
@@ -781,7 +742,7 @@ public class EventDealer {
         }
     }
 
-    public int calAuNodeID(int nodeID,int type){
+    private int calAuNodeID(int nodeID,int type){
         int auNodeID;
         switch (type){
             case 0: auNodeID = 4*nodeID-3;break;//Tx
@@ -793,7 +754,7 @@ public class EventDealer {
         return auNodeID;
     }
 
-    public AuxPath calcuAuxPath(ServiceEvent s){
+    private AuxPath calcuAuxPath(ServiceEvent s){
         //List<Link> vLinkList = genVirLinkList(CommonResource.ongoingServiceMap);
         //remove the same ones
         List<Link> auIPLinkList = genVirLinkList_noSame(CommonResource.ongoingServiceMap,s);
@@ -835,7 +796,7 @@ public class EventDealer {
         }
     }
 
-    public void calcuEnergyConsumedGeneral(ServiceEvent s){
+    private void calcuEnergyConsumedGeneral(ServiceEvent s){
         double energyConsumed = 0;
         if (s.splitNum==0){
             List<AuNode> OEOLogger = s.OEOLogger;
@@ -893,7 +854,35 @@ public class EventDealer {
         }
     }
 
-    public List<Link> genAuLinkList(List<Node> nodeList,List<AuNode> auNodeList,List<Link> linkList,List<Link> auIPLinkList,ServiceEvent s){
+    private void calcuVirHopsGeneral(ServiceEvent s){
+        if (s.splitNum==0){
+            s.setVirHops();
+        }else{
+            for (int i = 0; i < s.splitNum; i++){
+                s.subSerList.get(i).setVirHops();
+                s.virHops += s.subSerList.get(i).virHops;
+            }
+        }
+    }
+
+    private void calcuPhysHopsGeneral(ServiceEvent s){
+        if (s.splitNum==0){
+            for (AuAccessEdge edge:s.ownAuPath.auEdgeList) {
+                s.physHops += edge.physHops;
+            }
+        }else{
+            for (int i = 0; i < s.splitNum; i++){
+                //先计算单个子业务的总物理跳数
+                for (AuAccessEdge edge:s.subSerList.get(i).ownAuPath.auEdgeList) {
+                    s.subSerList.get(i).physHops += edge.physHops;
+                }
+                //再计算该业务的总物理跳数
+                s.physHops += s.subSerList.get(i).physHops;
+            }
+        }
+    }
+
+    private List<Link> genAuLinkList(List<Node> nodeList,List<AuNode> auNodeList,List<Link> linkList,List<Link> auIPLinkList,ServiceEvent s){
         //判断是否充足的slots资源，否的话，删去对应链路(本程序中认为slot资源充足)
         List<Link> auLinkList = new ArrayList<Link>();
         for (int i = 0; i < linkList.size(); i++){
@@ -943,7 +932,7 @@ public class EventDealer {
         return auLinkList;
     }
 
-    public double setWeightofOTRI(AuNode auNode,int transmissionRate){
+    private double setWeightofOTRI(AuNode auNode,int transmissionRate){
         double weightO1toT1; //the same as weightR1toI1
         if (auNode.isFixed){
             weightO1toT1 = 188;//185.5+102.5
@@ -957,27 +946,27 @@ public class EventDealer {
         return weightO1toT1;
     }
 
-    public List<Link> genVirLinkList(Map<Integer,ServiceEvent> ongoingServiceMap){
-        List<Link> vLinkList = new ArrayList<Link>();
-        double weight = 1;
+//    public List<Link> genVirLinkList(Map<Integer,ServiceEvent> ongoingServiceMap){
+//        List<Link> vLinkList = new ArrayList<Link>();
+//        double weight = 1;
+//
+//        if (ongoingServiceMap != null) {
+//            Iterator iterSer = ongoingServiceMap.entrySet().iterator();
+//            while (iterSer.hasNext()){
+//                HashMap.Entry entry = (HashMap.Entry) iterSer.next();
+////                Object serID = entry.getKey();
+////                int sID = (Integer)serID;
+//                Object ser = entry.getValue();
+//                ServiceEvent s = (ServiceEvent)ser;
+//                Link link = new Link(s.getSrc(), s.getDst(), weight);
+//                link.serviceOnLink.add(s);
+//                vLinkList.add(link);
+//            }
+//        }
+//        return vLinkList;
+//    }
 
-        if (ongoingServiceMap != null) {
-            Iterator iterSer = ongoingServiceMap.entrySet().iterator();
-            while (iterSer.hasNext()){
-                HashMap.Entry entry = (HashMap.Entry) iterSer.next();
-//                Object serID = entry.getKey();
-//                int sID = (Integer)serID;
-                Object ser = entry.getValue();
-                ServiceEvent s = (ServiceEvent)ser;
-                Link link = new Link(s.getSrc(), s.getDst(), weight);
-                link.serviceOnLink.add(s);
-                vLinkList.add(link);
-            }
-        }
-        return vLinkList;
-    }
-
-    public List<Link> genVirLinkList_noSame(Map<Integer,ServiceEvent> ongoingServiceMap,ServiceEvent currentSer){
+    private List<Link> genVirLinkList_noSame(Map<Integer,ServiceEvent> ongoingServiceMap,ServiceEvent currentSer){
         List<Link> vLinkList = new ArrayList<Link>();
 //        double weight = 1;
 
@@ -992,12 +981,14 @@ public class EventDealer {
 
                 if (s.OEOLogger==null){
                     for (int splitID = 0; splitID < s.splitNum; splitID++){
-                        genVirLinkList_splitSer(splitID,vLinkList,s.subSerList.get(splitID),currentSer);
+//                        genVirLinkList_splitSer(splitID,vLinkList,s.subSerList.get(splitID),currentSer);
 //                        genVirLinkList_splitSerCompare(splitID,vLinkList,s.subSerList.get(splitID),currentSer);
+                        genVirLinkList_splitSerMVH(splitID,vLinkList,s.subSerList.get(splitID),currentSer);
                     }
                 }else{
-                    genVirLinkList_splitSer(0,vLinkList,s,currentSer);
+//                    genVirLinkList_splitSer(0,vLinkList,s,currentSer);
 //                    genVirLinkList_splitSerCompare(0,vLinkList,s,currentSer);
+                    genVirLinkList_splitSerMVH(0,vLinkList,s,currentSer);
                 }
             }
         }
@@ -1005,7 +996,7 @@ public class EventDealer {
     }
 
     //计算某个节点中和当前请求一组EG的所有TR之和
-    public int calcuTotalTRforEG(ServiceEvent serInMap,AuNode auNode,boolean isTx){
+    private int calcuTotalTRforEG(ServiceEvent serInMap,AuNode auNode,boolean isTx){
         int totalTR = 0;
         List<ConsumCapType> consumCapTypeList = auNode.resourceStatus.ResLogger.get(serInMap.eventId);
         int clubEG = -1;
@@ -1036,122 +1027,87 @@ public class EventDealer {
         return totalTR;
     }
 
-    public void genVirLinkList_splitSer(int splitID,List<Link> vLinkList,ServiceEvent serInMap,ServiceEvent currentSer){
-        boolean flagSrc = false;
-        boolean flagDst = false;
-        if (serInMap.OEOLogger == null){
-            System.out.println("serInMap.OEOLogger == null");
-        }
-//        if (currentSer.eventId==3679){
-//            if (currentSer.transmissionRate == 60 && currentSer.splitID==1){
-//                System.out.println("s.eventId==3679");
-//            }
+//    private void genVirLinkList_splitSer(int splitID,List<Link> vLinkList,ServiceEvent serInMap,ServiceEvent currentSer){
+//        boolean flagSrc = false;
+//        boolean flagDst = false;
+//        if (serInMap.OEOLogger == null){
+//            System.out.println("serInMap.OEOLogger == null");
 //        }
-        /*** new ***/
-        int totalTR = serInMap.transmissionRate;
-//        for (int t = 0; t < serInMap.coSerEGList.size(); t++){
-//            if (currentSer.obtainHappenTime()<serInMap.coSerEGList.get(t).departTime){
-//                totalTR += serInMap.coSerEGList.get(t).transmission;
-//            }
-//        }
-        /*** --- ***/
-        for (int i = 0; i < serInMap.OEOLogger.size()/2; i++){
-//            if (i==1){
-//                System.out.println("serInMap.OEOLogger.size()>2");
-//            }
-            /*** a pair with two node ***/
-            flagSrc = false;
-            flagDst = false;
-            for (int j = 0; j < 2; j++){//i+j
-//                flagSrc = false;
-//                flagDst = false;
-                AuNode tempAuNode = serInMap.OEOLogger.get(2*i+j);
-                double nodeResSlot = CommonResource.calcuResourceSlot(tempAuNode.isFixed);
-                List<ConsumCapType> tempList= tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId);
-                int tempListID = 0;
-                if (tempList == null){
-                    System.out.println("tempList == null");
-                }
-//                if (tempList.size()>1){
-//                    tempListID = splitID;
+//        int totalTR = serInMap.transmissionRate;
+//        for (int i = 0; i < serInMap.OEOLogger.size()/2; i++){
+//            /*** a pair with two node ***/
+//            flagSrc = false;
+//            flagDst = false;
+//            for (int j = 0; j < 2; j++){//i+j
+//                AuNode tempAuNode = serInMap.OEOLogger.get(2*i+j);
+//                double nodeResSlot = CommonResource.calcuResourceSlot(tempAuNode.isFixed);
+//                List<ConsumCapType> tempList= tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId);
+//                int tempListID = 0;
+//                if (tempList == null){
+//                    System.out.println("tempList == null");
 //                }
-
-                if (tempAuNode.NodeType == 0){//Tx
-//                    if (tempListID == tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId).size()){
-//                        System.out.println("wrong");
+//                if (tempAuNode.NodeType == 0){//Tx
+//                    for (int t = 0; t < tempList.size(); t++){
+//                        if (tempList.get(t).splitID==splitID && tempList.get(t).isTx==true){
+//                            tempListID = t;
+//                            break;
+//                        }
 //                    }
-                    for (int t = 0; t < tempList.size(); t++){
-                        if (tempList.get(t).splitID==splitID && tempList.get(t).isTx==true){
-                            tempListID = t;
-                            break;
-                        }
-                    }
-
-                    double nodeEGCap = tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId).get(tempListID).consumNumsEG*nodeResSlot;
-                    totalTR = calcuTotalTRforEG(serInMap,tempAuNode,true);
-
-                    if (nodeEGCap >= (totalTR+currentSer.transmissionRate)){
-                        //satisfy electrical grooming constraint
-                        flagSrc = true;
-                    }
-                }
-                if (tempAuNode.NodeType == 1){//Rx
-//                    if (tempListID == tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId).size()){
-//                        System.out.println("wrong");
+//
+//                    double nodeEGCap = tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId).get(tempListID).consumNumsEG*nodeResSlot;
+//                    totalTR = calcuTotalTRforEG(serInMap,tempAuNode,true);
+//
+//                    if (nodeEGCap >= (totalTR+currentSer.transmissionRate)){
+//                        //satisfy electrical grooming constraint
+//                        flagSrc = true;
 //                    }
-                    for (int t = 0; t < tempList.size(); t++){
-                        if (tempList.get(t).splitID==splitID && tempList.get(t).isTx==false){
-                            tempListID = t;
-                            break;
-                        }
-                    }
-                    //nodeEGCap是网络中在线业务占用的粒度容量
-                    //totalTR是所有在该链路上正在进行电疏导的业务TR总和
-                    //节点剩余容量应该大于当前业务
-                    double nodeEGCap = tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId).get(tempListID).consumNumsEG*nodeResSlot;
-                    totalTR = calcuTotalTRforEG(serInMap,tempAuNode,false);
-                    if (nodeEGCap>= (totalTR+currentSer.transmissionRate)){
-                        //satisfy electrical grooming constraint
-                        flagDst = true;
-                    }
-                }
-                if (flagSrc&flagDst){//此时tempAuNode是dstNode
-//                    flagSrc = false;
-//                    flagDst = false;
-                    AuNode srcNode = serInMap.OEOLogger.get(2*i);
-
-                    //set weight
-                    double weight;
-//                    if (serInMap.OEOLogger.size()>2){
-//                        System.out.println("serInMap.OEOLogger.size()>2");
+//                }
+//                if (tempAuNode.NodeType == 1){//Rx
+//                    for (int t = 0; t < tempList.size(); t++){
+//                        if (tempList.get(t).splitID==splitID && tempList.get(t).isTx==false){
+//                            tempListID = t;
+//                            break;
+//                        }
 //                    }
-//                    if (i==1){
-//                        System.out.println("serInMap.OEOLogger.size()>2");
+//                    //nodeEGCap是网络中在线业务占用的粒度容量
+//                    //totalTR是所有在该链路上正在进行电疏导的业务TR总和
+//                    //节点剩余容量应该大于当前业务
+//                    double nodeEGCap = tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId).get(tempListID).consumNumsEG*nodeResSlot;
+//                    totalTR = calcuTotalTRforEG(serInMap,tempAuNode,false);
+//                    if (nodeEGCap>= (totalTR+currentSer.transmissionRate)){
+//                        //satisfy electrical grooming constraint
+//                        flagDst = true;
 //                    }
-                    if (srcNode.isFixed & tempAuNode.isFixed){//both fixed node
-                        weight = 0.001;
-                    }else if (!srcNode.isFixed & !tempAuNode.isFixed){//both flexible node
-                        weight = 1.683*currentSer.transmissionRate;
-                    }else {//a fixed and a flexible node
-                        weight = 0.8415*currentSer.transmissionRate;
-                    }
-                    //add link
-                    Link link = new Link(calAuNodeID(srcNode.nodeID,2), calAuNodeID(tempAuNode.nodeID,3), weight);//in auxiliary graph
-                    if (vLinkList.contains(link)){
-                        int index = vLinkList.indexOf(link);
-                        vLinkList.get(index).serviceOnLink.add(serInMap);
-                    }else {
-                        link.serviceOnLink.add(serInMap);
-                        vLinkList.add(link);
-                    }
-                }
-            }
+//                }
+//                if (flagSrc&flagDst){//此时tempAuNode是dstNode
+//                    AuNode srcNode = serInMap.OEOLogger.get(2*i);
+//
+//                    //set weight
+//                    double weight;
+//                    if (srcNode.isFixed & tempAuNode.isFixed){//both fixed node
+//                        weight = 0.001;
+//                    }else if (!srcNode.isFixed & !tempAuNode.isFixed){//both flexible node
+//                        weight = 1.683*currentSer.transmissionRate;
+//                    }else {//a fixed and a flexible node
+//                        weight = 0.8415*currentSer.transmissionRate;
+//                    }
+//                    //add link
+//                    Link link = new Link(calAuNodeID(srcNode.nodeID,2), calAuNodeID(tempAuNode.nodeID,3), weight);//in auxiliary graph
+//                    if (vLinkList.contains(link)){
+//                        int index = vLinkList.indexOf(link);
+//                        vLinkList.get(index).serviceOnLink.add(serInMap);
+//                    }else {
+//                        link.serviceOnLink.add(serInMap);
+//                        vLinkList.add(link);
+//                    }
+//                }
+//            }
+//
+//            /*** --- ***/
+//        }
+//    }
 
-            /*** --- ***/
-        }
-    }
-
-    public AuNode setAuTRNodePerService(Node node,int requestResNum,int givenResNum,int auNodeID,boolean isTx){
+    private AuNode setAuTRNodePerService(Node node,int requestResNum,int givenResNum,int auNodeID,boolean isTx){
         AuNode auNode = new AuNode(node.nodeID,node.isFixedNode);
         boolean flagSubFound = false;
         boolean flagResEnough = false;
@@ -1203,7 +1159,7 @@ public class EventDealer {
         return auNode;
     }
 
-    public AuNode setAuIPNodePerService(Node node,int auNodeID,boolean isOut){
+    private AuNode setAuIPNodePerService(Node node,int auNodeID,boolean isOut){
         AuNode auNode = new AuNode(node.nodeID,node.isFixedNode);
         boolean flagSubFound = false;//for transponder
         boolean flagResEnough = false;//for transponder
@@ -1352,35 +1308,91 @@ public class EventDealer {
         }
         return weightO1toT1;
     }
-    public void genVirLinkList_splitSerCompare(int splitID,List<Link> vLinkList,ServiceEvent serInMap,ServiceEvent currentSer){
+//    public void genVirLinkList_splitSerCompare(int splitID,List<Link> vLinkList,ServiceEvent serInMap,ServiceEvent currentSer){
+//        boolean flagSrc = false;
+//        boolean flagDst = false;
+//        if (serInMap.OEOLogger == null){
+//            System.out.println("serInMap.OEOLogger == null");
+//        }
+//        int totalTR = serInMap.transmissionRate;
+//        for (int i = 0; i < serInMap.OEOLogger.size()/2; i++){
+//            /*** a pair with two node ***/
+//            flagSrc = false;
+//            flagDst = false;
+//            for (int j = 0; j < 2; j++){//i+j
+//                AuNode tempAuNode = serInMap.OEOLogger.get(2*i+j);
+//                double nodeResSlot = CommonResource.calcuResourceSlot(tempAuNode.isFixed);
+//                List<ConsumCapType> tempList= tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId);
+//                int tempListID = 0;
+//                if (tempList == null){
+//                    System.out.println("tempList == null");
+//                }
+//                if (tempAuNode.NodeType == 0){//Tx
+//                    for (int t = 0; t < tempList.size(); t++){
+//                        if (tempList.get(t).splitID==splitID && tempList.get(t).isTx==true){
+//                            tempListID = t;
+//                            break;
+//                        }
+//                    }
+//
+//                    double nodeEGCap = tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId).get(tempListID).consumNumsEG*nodeResSlot;
+//                    totalTR = calcuTotalTRforEG(serInMap,tempAuNode,true);
+//
+//                    if (nodeEGCap >= (totalTR+currentSer.transmissionRate)){
+//                        //satisfy electrical grooming constraint
+//                        flagSrc = true;
+//                    }
+//                }
+//                if (tempAuNode.NodeType == 1){//Rx
+//                    for (int t = 0; t < tempList.size(); t++){
+//                        if (tempList.get(t).splitID==splitID && tempList.get(t).isTx==false){
+//                            tempListID = t;
+//                            break;
+//                        }
+//                    }
+//                    //nodeEGCap是网络中在线业务占用的粒度容量
+//                    //totalTR是所有在该链路上正在进行电疏导的业务TR总和
+//                    //节点剩余容量应该大于当前业务
+//                    double nodeEGCap = tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId).get(tempListID).consumNumsEG*nodeResSlot;
+//                    totalTR = calcuTotalTRforEG(serInMap,tempAuNode,false);
+//                    if (nodeEGCap>= (totalTR+currentSer.transmissionRate)){
+//                        //satisfy electrical grooming constraint
+//                        flagDst = true;
+//                    }
+//                }
+//                if (flagSrc&flagDst){//此时tempAuNode是dstNode
+//                    AuNode srcNode = serInMap.OEOLogger.get(2*i);
+//
+//                    //set weight
+//                    double weight=0.09;//existing lightpath:MOG0.09;MEG0.01
+//                    //add link
+//                    Link link = new Link(calAuNodeID(srcNode.nodeID,2), calAuNodeID(tempAuNode.nodeID,3), weight);//in auxiliary graph
+//                    if (vLinkList.contains(link)){
+//                        int index = vLinkList.indexOf(link);
+//                        vLinkList.get(index).serviceOnLink.add(serInMap);
+//                    }else {
+//                        link.serviceOnLink.add(serInMap);
+//                        vLinkList.add(link);
+//                    }
+//                }
+//            }
+//
+//            /*** --- ***/
+//        }
+//    }
+
+    private void genVirLinkList_splitSerMVH(int splitID,List<Link> vLinkList,ServiceEvent serInMap,ServiceEvent currentSer){
         boolean flagSrc = false;
         boolean flagDst = false;
         if (serInMap.OEOLogger == null){
             System.out.println("serInMap.OEOLogger == null");
         }
-//        if (currentSer.eventId==3679){
-//            if (currentSer.transmissionRate == 60 && currentSer.splitID==1){
-//                System.out.println("s.eventId==3679");
-//            }
-//        }
-        /*** new ***/
         int totalTR = serInMap.transmissionRate;
-//        for (int t = 0; t < serInMap.coSerEGList.size(); t++){
-//            if (currentSer.obtainHappenTime()<serInMap.coSerEGList.get(t).departTime){
-//                totalTR += serInMap.coSerEGList.get(t).transmission;
-//            }
-//        }
-        /*** --- ***/
         for (int i = 0; i < serInMap.OEOLogger.size()/2; i++){
-//            if (i==1){
-//                System.out.println("serInMap.OEOLogger.size()>2");
-//            }
             /*** a pair with two node ***/
             flagSrc = false;
             flagDst = false;
             for (int j = 0; j < 2; j++){//i+j
-//                flagSrc = false;
-//                flagDst = false;
                 AuNode tempAuNode = serInMap.OEOLogger.get(2*i+j);
                 double nodeResSlot = CommonResource.calcuResourceSlot(tempAuNode.isFixed);
                 List<ConsumCapType> tempList= tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId);
@@ -1388,14 +1400,7 @@ public class EventDealer {
                 if (tempList == null){
                     System.out.println("tempList == null");
                 }
-//                if (tempList.size()>1){
-//                    tempListID = splitID;
-//                }
-
                 if (tempAuNode.NodeType == 0){//Tx
-//                    if (tempListID == tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId).size()){
-//                        System.out.println("wrong");
-//                    }
                     for (int t = 0; t < tempList.size(); t++){
                         if (tempList.get(t).splitID==splitID && tempList.get(t).isTx==true){
                             tempListID = t;
@@ -1412,9 +1417,6 @@ public class EventDealer {
                     }
                 }
                 if (tempAuNode.NodeType == 1){//Rx
-//                    if (tempListID == tempAuNode.resourceStatus.ResLogger.get(serInMap.eventId).size()){
-//                        System.out.println("wrong");
-//                    }
                     for (int t = 0; t < tempList.size(); t++){
                         if (tempList.get(t).splitID==splitID && tempList.get(t).isTx==false){
                             tempListID = t;
@@ -1432,19 +1434,47 @@ public class EventDealer {
                     }
                 }
                 if (flagSrc&flagDst){//此时tempAuNode是dstNode
-//                    flagSrc = false;
-//                    flagDst = false;
                     AuNode srcNode = serInMap.OEOLogger.get(2*i);
 
                     //set weight
-                    double weight=0.09;//existing lightpath:MOG0.09;MEG0.01
+                    double weight=1;
+                    //统计物理跳数
+                    int physHops = 0;
+                    boolean flagStart = false;
+                    if (!srcNode.isEG && !tempAuNode.isEG){//不含电疏导
+                        for (AuAccessEdge edge:serInMap.ownAuPath.auEdgeList) {
+                            if (edge.getAuSource().nodeID == srcNode.nodeID){
+                                flagStart = true;
+                            }else if (edge.getAuDest().nodeID == tempAuNode.nodeID){
+                                physHops += edge.physHops;
+                                flagStart = false;
+                                break;
+                            }
+                            if (flagStart){
+                                physHops += edge.physHops;
+                            }
+                        }
+                    }else{//含电疏导，已经在updateEGRes函数里给physHops赋值，这里只需取出来
+                        for (AuAccessEdge edge:serInMap.ownAuPath.auEdgeList) {
+                            if (edge.getAuSource().nodeID == srcNode.nodeID
+                                    && edge.getAuDest().nodeID == tempAuNode.nodeID){
+                                physHops += edge.physHops;
+                                break;
+                            }
+                        }
+                    }
+                    //MVH algorithm: 100+0.01H+0.0001(H-1)
+                    weight = 100+0.01*physHops+0.0001*(physHops-1);
                     //add link
                     Link link = new Link(calAuNodeID(srcNode.nodeID,2), calAuNodeID(tempAuNode.nodeID,3), weight);//in auxiliary graph
                     if (vLinkList.contains(link)){
                         int index = vLinkList.indexOf(link);
-                        vLinkList.get(index).serviceOnLink.add(serInMap);
+                        vLinkList.get(index).serviceOnLink.put(physHops,serInMap);
+                        if (vLinkList.get(index).serviceOnLink.size()>1){
+                            System.out.println("serviceOnLink.size()>1");
+                        }
                     }else {
-                        link.serviceOnLink.add(serInMap);
+                        link.serviceOnLink.put(physHops,serInMap);
                         vLinkList.add(link);
                     }
                 }
@@ -1454,3 +1484,4 @@ public class EventDealer {
         }
     }
 }
+

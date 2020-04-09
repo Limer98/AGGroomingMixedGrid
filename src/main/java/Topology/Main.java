@@ -6,7 +6,9 @@ import Gen.ServiceEvent;
 import Network.Network;
 import Utils.ReadTopo;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
+import java.io.FileWriter;
 
+import java.io.IOException;
 import java.net.CookieHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +25,7 @@ public class Main {
 
     public static void main(String[] args) {
         Long startTime = System.currentTimeMillis();
-        Map<Integer,ServiceEvent> serviceMap;
+//        Map<Integer,ServiceEvent> serviceMap;
 //        List<Node> nodeList =  new ArrayList<Node>();
         List<Link> linkList =  new ArrayList<Link>();
         //read topo and get node and linklist
@@ -50,24 +52,28 @@ public class Main {
 //        fileName = CommonResource.numConnectionRequest+"-nodeNum"+CommonResource.NODE_NUMBER+"-mu0.04-rou100-TR10 10 40 40 100 200 400.txt";
 //        CommonResource.writeSerListToTXT(fileName,serviceList);
         //read serList from txt
-        String fileName = "50000-nodeNum14-mu0.04-rou200-TR{10,40,100,120,160,200}.txt";
-//        String fileName = "testCRs.txt";
-//        String fileName = "50000-nodeNum14-mu0.04-rou100-TR{10,20,30,40,100,120,160,200,400}.txt";
-        List<ServiceEvent> serviceList = CommonResource.readSerListFromTXT(fileName);
+        double rou = 200;
 
-        EventDealer eventDealer = new EventDealer(serviceList,graphG,CommonResource.nodeList,linkList);
-        eventDealer.doDeal();
+        for (int i = 0; i < 15; i++) {
+            Map<Integer, ServiceEvent> serviceMap;
+            String fileName = "50000-nodeNum14-mu0.04-rou" + rou + "-TR{10,40,100,120,160,200,400}.txt";
+            List<ServiceEvent> serviceList = CommonResource.readSerListFromTXT(fileName);
 
-        serviceMap = eventDealer.getServiceMap();
-/*
-        for (int i = 0; i < serviceMap.size(); i++) {
-            System.out.println(serviceMap.get(i).get(0).flagForSuccess);
-        }*/
+//        String fileName = "50000-nodeNum14-mu0.04-rou200-TR{10,40,100,120,160,200}.txt";
+////        String fileName = "testCRs.txt";
+////        String fileName = "50000-nodeNum14-mu0.04-rou100-TR{10,20,30,40,100,120,160,200,400}.txt";
+//        List<ServiceEvent> serviceList = CommonResource.readSerListFromTXT(fileName);
 
-       SimulationResult simulationResult = new SimulationResult(serviceMap,false);
-//        SimulationResult simulationResultTree = new SimulationResult(serviceMap,true);
-        simulationResult.outputResToFile();
-//        simulationResultTree.outputResToFile();
+            EventDealer eventDealer = new EventDealer(serviceList, graphG, CommonResource.nodeList, linkList);
+            eventDealer.doDeal();
+
+            serviceMap = eventDealer.getServiceMap();
+
+            SimulationResult simulationResult = new SimulationResult(serviceMap, false);
+//            System.out.println(rou + "\n");
+            simulationResult.outputResToFile(rou);
+            rou = rou + 10;
+        }
         Long endTime = System.currentTimeMillis();
 
 // 计算并打印耗时

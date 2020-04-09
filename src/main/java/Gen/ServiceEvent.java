@@ -26,8 +26,15 @@ public class ServiceEvent extends Event implements Cloneable {
     public List<ServiceEvent> subSerList;
     public List<AuNode> OEOLogger;//record O-E-O node:nodeID,used transponder resourceStatus
     public double energyConsumed;
-//    public List<ServiceEvent> coSerEGList;
-//    public List<CoSerEG> coSerEGList = new ArrayList<CoSerEG>();
+    public int virHops = 0;//该请求的虚拟跳数
+    public int physHops = 0;//该请求的物理跳数
+
+    public void setVirHops(){
+        this.virHops = this.OEOLogger.size()/2;
+    }
+    public int getVirHops(){
+        return this.virHops;
+    }
 
     public int getSrc() {
         return src;
