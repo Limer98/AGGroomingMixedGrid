@@ -4,6 +4,7 @@ import Gen.EventType;
 import Gen.ServiceEvent;
 import Topology.Link;
 import Topology.Node;
+import Topology.Result;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -24,14 +25,15 @@ public class CommonResource {
 
    public static int NODE_NUMBER = 14;
    public static String FILE_NAME = "NSFnet.txt";
-   public static int[] flexNodes = {2, 6, 10, 12, 13, 5, 9, 1, 14, 3, 11};//other nodes are fixedNodes
-//{1,2,3,5,6,9,10,11,12,13}
+   public static int[] flexNodes = {1,2,3,5,6,9,10,11,12,13,14};//other nodes are fixedNodes
+//{1,2,3,5,6,9,10,11,12,13,14}
 //   public static int[] flexNodes = {};
-   public static double CURRENT_TIME = 0;
-   public static Integer[][] defaultTopo;
-   public static Integer[][] defaultResource;
+//   public static double CURRENT_TIME = 0;
+//   public static Integer[][] defaultTopo;
+//   public static Integer[][] defaultResource;
+   public static List<Result> resultsList = new ArrayList<Result>();
 
-   public static int numConnectionRequest = 50;
+//   public static int numConnectionRequest = 50;
    public static int numSlots = 320; //1THz. granularity of FS is 12.5GHz(flex)
    public static int[] transmissionRateSet = {115}; //Gbps [10,2x-10]
 
@@ -51,12 +53,12 @@ public class CommonResource {
    public static Map<Integer,ServiceEvent> ongoingServiceMap = new HashMap<Integer,ServiceEvent>();//eventID,s
    public static List<Link> virLinkList;
 
-   public static int KeyCyclePeriod = 10;
-   public static double ShiftTimeForInsert = 0.00000001;
+//   public static int KeyCyclePeriod = 10;
+//   public static double ShiftTimeForInsert = 0.00000001;
    public static int[][] keyResource;
    public static int[][] keyResourceTree;
-   public static double genKeysPerTime = 4;
-   public static int themostKeys = 1000;
+//   public static double genKeysPerTime = 4;
+//   public static int themostKeys = 1000;
 
    public static List<Integer> genNewSameList(List<Integer> o){
       List<Integer> m = new ArrayList<Integer>();
@@ -98,7 +100,7 @@ public class CommonResource {
       return resourceSlot;
    }
 
-   public static List<ServiceEvent> readSerListFromTXT(String fileName){
+   public List<ServiceEvent> readSerListFromTXT(String fileName){
       List<ServiceEvent> serviceEventList = new ArrayList<ServiceEvent>();
 
       BufferedReader inputStream = null;
@@ -141,7 +143,7 @@ public class CommonResource {
 
       return serviceEventList;
    }
-   public static void writeSerListToTXT(String fileName,List<ServiceEvent> serList){
+   public void writeSerListToTXT(String fileName,List<ServiceEvent> serList){
       System.out.println(fileName);
       int rowNum = serList.size();
       int columnNum = 7;
@@ -166,6 +168,90 @@ public class CommonResource {
             fw.write("\n");
          }
          fw.close();
+      }
+      catch (IOException e){
+         e.printStackTrace();
+      }
+   }
+
+   public List<ServiceEvent> readSerListFromTXTsplit(String fileName,int num){
+      List<ServiceEvent> serviceEventList = new ArrayList<ServiceEvent>();
+
+      BufferedReader inputStream = null;
+      boolean isFirstLine = true;
+      int num1 = 2000*num;
+      int num2 = 2000*(num+1);
+      try {
+         inputStream = new BufferedReader(new FileReader(fileName));
+         String line;
+         int c = 0;
+         while((line = inputStream.readLine()) != null){
+            if (c>=num1&&c<num2){
+               String[] nodeRow = line.split("\\s+");
+               //EventType eventType, int eventId, double arriveTime, double holdTime, int src, int dst, int transmissionRate
+               ServiceEvent ser = new ServiceEvent();
+               if (isFirstLine){
+                  isFirstLine = false;//第一行是说明，所以读的时候要跳过
+                  continue;
+               }
+               for (int j = 0; j<nodeRow.length; j++) {
+                  switch (j){
+                     case 0: {
+                        if (nodeRow[j].equals("SERVICE_ARRIVAL")){
+                           ser.setEventType(EventType.SERVICE_ARRIVAL);
+                        }else if (nodeRow[j].equals("SERVICE_END")){
+                           ser.setEventType(EventType.SERVICE_END);
+                        }
+                        break;
+                     }
+                     case 1: ser.eventId = Integer.parseInt(nodeRow[j]);break;
+                     case 2: ser.setArriveTime(Double.parseDouble(nodeRow[j]));break;
+                     case 3: ser.setHoldTime(Double.parseDouble(nodeRow[j]));break;
+                     case 4: ser.setSrc(Integer.parseInt(nodeRow[j]));break;
+                     case 5: ser.setDst(Integer.parseInt(nodeRow[j]));break;
+                     case 6: ser.setTransmissionRate(Integer.parseInt(nodeRow[j]));break;
+                     default:break;
+                  }
+               }
+               serviceEventList.add(ser);
+            }
+            c++;
+         }
+      } catch(Exception e){
+         System.out.println(e);
+      }
+
+      return serviceEventList;
+   }
+   //print result of a service
+   public void writeArrayToTxt(String string) {
+//        System.out.println(string);
+      int count=0;
+      int sum=0;
+      double energyConsumed = 0;
+      int totalVirHops = 0;
+      int totalPhysHops = 0;
+      int rowNum = resultsList.size();//行
+      int columnNum = 6;//列
+      try {
+         FileWriter fw = new FileWriter(string);
+         fw.write("rou"+"\t"+"count"+"\t"+"serviceMap.size()"+"\t"+"energyConsumed"+"\t"+"totalVirHops"+"\t"+"totalPhysHops"+"\n");
+         for (int i = 0; i < rowNum; i++){
+            fw.write(resultsList.get(i).rou+"\t");
+            fw.write(resultsList.get(i).count+"\t");
+            fw.write(resultsList.get(i).sum+"\t");
+            fw.write(resultsList.get(i).energyConsumed+"\t");
+            fw.write(resultsList.get(i).totalVirHops+"\t");
+            fw.write(resultsList.get(i).totalPhysHops+"\t");
+            fw.write("\n");
+            count += resultsList.get(i).count;
+            sum += resultsList.get(i).sum;
+            energyConsumed += resultsList.get(i).energyConsumed;
+            totalVirHops += resultsList.get(i).totalVirHops;
+            totalPhysHops += resultsList.get(i).totalPhysHops;
+         }
+         fw.write(count+"\t"+sum+"\t"+energyConsumed/count+"\t"+(double)totalVirHops/count+"\t"+(double)totalPhysHops/count+"\n");
+         fw.close();//close the file after writing
       }
       catch (IOException e){
          e.printStackTrace();

@@ -20,7 +20,7 @@ public class Network implements Serializable {
     private static DoubleHash<Integer, Integer, ArrayList<Path>> candidatePaths;
     private HashMap<ServiceEvent, Connection> ongoingConnections;
     private HashMap<Link, Collection<Connection>> linkIndexedConnections;
-    public HashMap<Integer, Node> nodeIndex; //nodeID node
+    private HashMap<Integer, Node> nodeIndex; //nodeID node
     private ReadTopo readTopo;
 
     public Network(ReadTopo readTopo){

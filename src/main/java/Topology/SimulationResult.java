@@ -5,9 +5,8 @@ import Gen.ServiceEvent;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -105,63 +104,90 @@ public class SimulationResult {
         int totalVirHops = 0;
         int totalPhysHops = 0;
         boolean flag;
-        for (int i = 0; i < serviceMap.size(); i++) {
-
+        Iterator iter = serviceMap.entrySet().iterator();
+        while (iter.hasNext()){
+            HashMap.Entry entry = (HashMap.Entry) iter.next();
+//            Object serID = entry.getKey();
+            Object serInMap = entry.getValue();
+            ServiceEvent ser = (ServiceEvent) serInMap;
             if(isTree){
-               flag = serviceMap.get(i).flagForSuccessTree;
+               flag = ser.flagForSuccessTree;
             }
             else{
-                flag = serviceMap.get(i).flagForSuccess;
+                flag = ser.flagForSuccess;
             }
             if (flag){
                 count++;
-                energyConsumed += serviceMap.get(i).energyConsumed;
-                totalVirHops += serviceMap.get(i).virHops;
-                totalPhysHops += serviceMap.get(i).physHops;
+                energyConsumed += ser.energyConsumed;
+                totalVirHops += ser.virHops;
+                totalPhysHops += ser.physHops;
             }
         }
+//        for (int i = 0; i < serviceMap.size(); i++) {
+//
+//            if(isTree){
+//               flag = serviceMap.get(i).flagForSuccessTree;
+//            }
+//            else{
+//                if (serviceMap.get(i) == null){
+//                    System.out.println("serviceMap.get(i) == null");
+//                }
+//                flag = serviceMap.get(i).flagForSuccess;
+//            }
+//            if (flag){
+//                count++;
+//                energyConsumed += serviceMap.get(i).energyConsumed;
+//                totalVirHops += serviceMap.get(i).virHops;
+//                totalPhysHops += serviceMap.get(i).physHops;
+//            }
+//        }
 
-        double successRatio = (double)count/sum;
-        double aveEnergy = energyConsumed/count;
-        double aveVirHops = (double) totalVirHops/count;
-        double avePhysHops = (double) totalPhysHops/count;
-        System.out.println(rou+"\t"+aveEnergy+"\t"+successRatio+"\t"+energyConsumed+"\t"+aveVirHops+"\t"+avePhysHops);
-
+//        double successRatio = (double)count/sum;
+//        double aveEnergy = energyConsumed/count;
+//        double aveVirHops = (double) totalVirHops/count;
+//        double avePhysHops = (double) totalPhysHops/count;
+//        System.out.println(rou+"\t"+aveEnergy+"\t"+successRatio+"\t"+energyConsumed+"\t"+aveVirHops+"\t"+avePhysHops);
+        System.out.println(rou+"\t"+count+"\t"+serviceMap.size()+"\t"+energyConsumed+"\t"+totalVirHops+"\t"+totalPhysHops);
+        CommonResource.resultsList.add(new Result(rou,count,serviceMap.size(),energyConsumed,totalVirHops,totalPhysHops));
+//        String fpName = "result1";
+//        writeArrayToTxt(fpName,rou,count,serviceMap.size(),energyConsumed,totalVirHops,totalPhysHops);
 //        writeArrayToTxt(fileName,rou,successRatio,energyConsumed,aveEnergy);
     }
 
-    public void writeArrayToTxt(String string, int rou, double successRatio, double energyConsumed, double aveEnergy) {
-        System.out.println(string);
-        int rowNum = 1;//行
-        int columnNum = 1;//列
-        try {
-            FileWriter fw = new FileWriter(string);
-            for (int i = 0; i < rowNum; i++){
-                for (int j = 0; j < columnNum;j++){
-                    fw.write(rou+"\t");
-                    fw.write(successRatio+"\t");
-                    fw.write(energyConsumed+"\t");
-                    fw.write(aveEnergy+"\t");
-                    fw.write("\n");
-                }
-            }
-
-//            fw.write("successRadio:"+"\n");
-/*            for (int i = 0; i < successRadio.size(); i++) {
-                fw.write(successRadio.get(i)+"\t");
-            }*/
-//            for (int i = 0; i < rowNum; i++) {
-//                for (int j = 0; j < columnNum; j++)
-//                    fw.write(successRadio.get(i)+ "\t");
-//                fw.write("\n");
+//    public void writeArrayToTxt(String string, double rou, int count, int sum, double energyConsumed, double totalVirHops, double totalPhysHops) {
+////        System.out.println(string);
+//        int rowNum = serviceMap.size();//行
+//        int columnNum = 6;//列
+//        try {
+//            FileWriter fw = new FileWriter(string);
+//            for (int i = 0; i < rowNum; i++){
+//                for (int j = 0; j < columnNum;j++){
+//                    fw.write(rou+"\t");
+//                    fw.write(count+"\t");
+//                    fw.write(sum+"\t");
+//                    fw.write(energyConsumed+"\t");
+//                    fw.write(totalVirHops+"\t");
+//                    fw.write(totalPhysHops+"\t");
+//                    fw.write("\n");
+//                }
 //            }
-
-//            fw.close();
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-    }
+//
+////            fw.write("successRadio:"+"\n");
+///*            for (int i = 0; i < successRadio.size(); i++) {
+//                fw.write(successRadio.get(i)+"\t");
+//            }*/
+////            for (int i = 0; i < rowNum; i++) {
+////                for (int j = 0; j < columnNum; j++)
+////                    fw.write(successRadio.get(i)+ "\t");
+////                fw.write("\n");
+////            }
+//
+////            fw.close();
+//        }
+//        catch (IOException e){
+//            e.printStackTrace();
+//        }
+//    }
 /*    public void writeArrayToTxt(int[][] data, String string,ArrayList<Double> successRadio) {
         System.out.println(string);
         int rowNum = data.length;

@@ -1,17 +1,14 @@
 package Topology;
 
 import Common.CommonResource;
-import Gen.ServerGenerator;
 import Gen.ServiceEvent;
 import Network.Network;
 import Utils.ReadTopo;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
-import java.io.FileWriter;
 
+import java.io.FileWriter;
 import java.io.IOException;
-import java.net.CookieHandler;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +31,7 @@ public class Main {
         network.setAllFixedNodes();
         network.setFlexNodes(CommonResource.flexNodes);
         CommonResource.nodeList = topo.getNodeList();
+        CommonResource commonResource = new CommonResource();
 /*        for (int i = 0; i < network.getNumNodes(); i++){
             System.out.println(nodeList.get(i).nodeID+" "+nodeList.get(i).isFixedNode);
         }*/
@@ -43,7 +41,7 @@ public class Main {
         }
 
         linkList = topo.getLinkList();
-        DefaultDirectedWeightedGraph<Node, AccessEdge> graphG = new Graph(CommonResource.nodeList,linkList).getG(); //默认有向加权图
+//        DefaultDirectedWeightedGraph<Node, AccessEdge> graphG = new Graph(CommonResource.nodeList,linkList).getG(); //默认有向加权图
 
         //gen and output serList to txt
 //        ServerGenerator serverG = new ServerGenerator(CommonResource.NODE_NUMBER,0.04,100,
@@ -54,17 +52,20 @@ public class Main {
         //read serList from txt
         double rou = 200;
 
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 50; i++) {//50*2000=100000=50000*2
             Map<Integer, ServiceEvent> serviceMap;
             String fileName = "50000-nodeNum14-mu0.04-rou" + rou + "-TR{10,40,100,120,160,200,400}.txt";
-            List<ServiceEvent> serviceList = CommonResource.readSerListFromTXT(fileName);
+//            List<ServiceEvent> serviceList = CommonResource/.readSerListFromTXT(fileName);
 
 //        String fileName = "50000-nodeNum14-mu0.04-rou200-TR{10,40,100,120,160,200}.txt";
-////        String fileName = "testCRs.txt";
-////        String fileName = "50000-nodeNum14-mu0.04-rou100-TR{10,20,30,40,100,120,160,200,400}.txt";
-//        List<ServiceEvent> serviceList = CommonResource.readSerListFromTXT(fileName);
+//        String fileName = "testCRs.txt";
+//        String fileName = "50000-nodeNum14-mu0.04-rou100-TR{10,20,30,40,100,120,160,200,400}.txt";
+//            List<ServiceEvent> serviceList = CommonResource.readSerListFromTXT(fileName);
+//            String fileName = "50000-nodeNum14-mu0.04-rou" + rou + "-TR{10multi5}.txt";
+            List<ServiceEvent> serviceList = commonResource.readSerListFromTXTsplit(fileName,i);
 
-            EventDealer eventDealer = new EventDealer(serviceList, graphG, CommonResource.nodeList, linkList);
+//            EventDealer eventDealer = new EventDealer(serviceList, graphG, CommonResource.nodeList, linkList);
+            EventDealer eventDealer = new EventDealer(serviceList, CommonResource.nodeList, linkList);
             eventDealer.doDeal();
 
             serviceMap = eventDealer.getServiceMap();
@@ -72,8 +73,10 @@ public class Main {
             SimulationResult simulationResult = new SimulationResult(serviceMap, false);
 //            System.out.println(rou + "\n");
             simulationResult.outputResToFile(rou);
-            rou = rou + 10;
+//            rou = rou + 10;
         }
+        String fpName = "result1.txt";
+        commonResource.writeArrayToTxt(fpName);
         Long endTime = System.currentTimeMillis();
 
 // 计算并打印耗时
@@ -85,4 +88,5 @@ public class Main {
                 ((((tempTime/60000)>0)||((tempTime%60000/1000)>0))?((tempTime%60000/1000)+"s"):(""))+
                 ((tempTime%1000)+"ms"));
     }
+
 }
