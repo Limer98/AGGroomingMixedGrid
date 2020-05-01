@@ -16,7 +16,7 @@ public class Node {
     public int nodeID;
     public boolean isFixedNode;
     public List<ResourceStatus> resPerNode; //a ResourceStatue means a new transponder
-//    public List<ResourceStatus> resPerNode1;
+    public double energy = 0;
 
     public Node(int nodeID){
         this.nodeID = nodeID;
@@ -36,6 +36,7 @@ public class Node {
 
         int numTrans;
         int numSubTrans;
+        energy = 0;
         if (this.getIsFixedNode()){
             numTrans = CommonResource.numNSTransponderPerNode;
             numSubTrans = 1;

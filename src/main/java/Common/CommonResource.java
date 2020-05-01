@@ -24,16 +24,21 @@ import java.util.Map;
 public class CommonResource {
 
    public static int NODE_NUMBER = 14;
+   private int READONCE_NUMBER = 5000;//一次读入的数据个数
+   public static int RUNTIMES_NUMBER = 40;//要算完全部到达离去请求个数的对应次数 40
+   //READONCE_NUMBER*RUNTIMES_NUMBER=numConnectionRequest*2
+   public static int ALGORITHM_TYPE = 2;
+   //0:EMG,1:MOG,2:MEG,3:MVH
    public static String FILE_NAME = "NSFnet.txt";
-   public static int[] flexNodes = {1,2,3,5,6,9,10,11,12,13,14};//other nodes are fixedNodes
+   public static int[] flexNodes = {1,2,3,5,6,9,10};//other nodes are fixedNodes
 //{1,2,3,5,6,9,10,11,12,13,14}
-//   public static int[] flexNodes = {};
 //   public static double CURRENT_TIME = 0;
 //   public static Integer[][] defaultTopo;
 //   public static Integer[][] defaultResource;
    public static List<Result> resultsList = new ArrayList<Result>();
+   public static List<Result> resultsListTemp = new ArrayList<Result>();
 
-//   public static int numConnectionRequest = 50;
+   public static int numConnectionRequest = 100000;
    public static int numSlots = 320; //1THz. granularity of FS is 12.5GHz(flex)
    public static int[] transmissionRateSet = {115}; //Gbps [10,2x-10]
 
@@ -179,8 +184,8 @@ public class CommonResource {
 
       BufferedReader inputStream = null;
       boolean isFirstLine = true;
-      int num1 = 2000*num;
-      int num2 = 2000*(num+1);
+      int num1 = READONCE_NUMBER*num;
+      int num2 = READONCE_NUMBER*(num+1);
       try {
          inputStream = new BufferedReader(new FileReader(fileName));
          String line;
@@ -250,7 +255,8 @@ public class CommonResource {
             totalVirHops += resultsList.get(i).totalVirHops;
             totalPhysHops += resultsList.get(i).totalPhysHops;
          }
-         fw.write(count+"\t"+sum+"\t"+energyConsumed/count+"\t"+(double)totalVirHops/count+"\t"+(double)totalPhysHops/count+"\n");
+//         fw.write(count+"\t"+sum+"\t"+energyConsumed/count+"\t"+(double)totalVirHops/count+"\t"+(double)totalPhysHops/count+"\n");
+//         System.out.println(count+"\t"+sum+"\t"+energyConsumed/count+"\t"+(double)totalVirHops/count+"\t"+(double)totalPhysHops/count+"\n");
          fw.close();//close the file after writing
       }
       catch (IOException e){
